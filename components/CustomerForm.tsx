@@ -32,17 +32,19 @@ export function CustomerForm({
         }))
       : [blank()],
   );
+  // Read-only (Finance) tanpa PIC: tampilkan keterangan, bukan baris input kosong.
+  const noPic = readOnly && !initial?.pics.length;
   const set = (key: number, patch: Partial<PicRow>) =>
     setPics((ps) => ps.map((p) => (p.key === key ? { ...p, ...patch } : p)));
 
   return (
-    <form action={action} style={{ maxWidth: 880 }}>
+    <form action={action}>
       {initial && <input type="hidden" name="id" value={initial.id} />}
       {returnTo && <input type="hidden" name="return_to" value={returnTo} />}
       <input type="hidden" name="pics" value={JSON.stringify(pics.map(({ key: _, ...p }) => p))} />
       {state?.error && <div className="err">{state.error}</div>}
 
-      <fieldset disabled={readOnly} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
+      <fieldset className="cform" disabled={readOnly}>
         <div className="panel">
           <h3>
             <Icon n="bld" /> Perusahaan
@@ -79,9 +81,10 @@ export function CustomerForm({
 
         <div className="panel">
           <h3>
-            <Icon n="users" /> PIC <span className="mut">{pics.length} orang</span>
+            <Icon n="users" /> PIC <span className="mut">{noPic ? 0 : pics.length} orang</span>
           </h3>
-          {pics.map((p) => (
+          {noPic && <p className="hint" style={{ margin: 0 }}>Belum ada PIC.</p>}
+          {!noPic && pics.map((p) => (
             <div className="pic-row" key={p.key}>
               <div className="f">
                 <label>
