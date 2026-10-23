@@ -10,6 +10,7 @@ import {
   submitInvoiceAction,
   type FormState,
 } from "@/app/actions";
+import { invoiceFileName } from "@/lib/company";
 import { CANCELLABLE, DELETABLE, EDITABLE, PRINTABLE, SURAT_JALAN_ROLES, deliveryGate, installmentLabel, suratJalanReady } from "@/lib/domain";
 import type { Invoice, Role } from "@/lib/types";
 import { Icon } from "./Icon";
@@ -210,7 +211,7 @@ export function InvoiceActions({ inv, role, group }: { inv: Invoice; role: Role;
         {PRINTABLE.includes(inv.status) && (
           <>
             <div className="doc-btns">
-              <DownloadButton pdfUrl={inv.status === "issued" || inv.status === "paid" ? inv.pdf_url : null} />
+              <DownloadButton fileName={invoiceFileName(inv)} />
               <PrintButton id={inv.id} small />
             </div>
             {inv.printed_at && <PrintedNote name={inv.printed_by_name} at={inv.printed_at} />}

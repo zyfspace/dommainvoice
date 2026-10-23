@@ -2,34 +2,43 @@
 
 import { useEffect, useRef, useState } from "react";
 import { printInvoiceAction } from "@/app/actions";
+import { downloadPdf } from "@/lib/pdf";
 import { Icon } from "./Icon";
 import { PrintConfirm } from "./PrintConfirm";
 
-// Dialog print yang dibuka untuk "Download" (Save as PDF) tidak dicatat sebagai cetak.
-let downloading = false;
+/** Download invoice: kertas di halaman ini dijadikan file PDF dan langsung terunduh (tanpa dialog print). */
+export function DownloadButton({ fileName }: { fileName: string }) {
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
-/** Download invoice: PDF dari n8n kalau sudah terbit, selain itu dialog print untuk "Save as PDF". */
-export function DownloadButton({ pdfUrl }: { pdfUrl?: string | null }) {
-  if (pdfUrl)
-    return (
-      <a href={pdfUrl} target="_blank" rel="noreferrer" className="btn sm" download aria-label="Download invoice" title="Download invoice">
-        <Icon n="download" s={14} /> Invoice
-      </a>
-    );
+  async function run() {
+    const el = document.querySelector<HTMLElement>("article.inv");
+    if (!el) return;
+    setBusy(true);
+    setErr(null);
+    try {
+      await downloadPdf(el, fileName);
+    } catch {
+      setErr("Gagal membuat PDF, coba lagi.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
-    <button
-      type="button"
-      className="btn sm"
-      aria-label="Download invoice"
-      title="Download invoice"
-      onClick={() => {
-        downloading = true;
-        window.print();
-        downloading = false;
-      }}
-    >
-      <Icon n="download" s={14} /> Invoice
-    </button>
+    <>
+      <button
+        type="button"
+        className="btn sm"
+        onClick={run}
+        disabled={busy}
+        aria-label="Download invoice (PDF)"
+        title="Download invoice (PDF)"
+      >
+        <Icon n="download" s={14} /> {busy ? "Memproses…" : "Invoice"}
+      </button>
+      {err && <span className="err" style={{ margin: 0 }}>{err}</span>}
+    </>
   );
 }
 
@@ -55,7 +64,7 @@ export function PrintButton({
   // Ctrl+P / menu browser tetap tercatat (tanpa konfirmasi, dialog print sudah terbuka).
   useEffect(() => {
     const before = () => {
-      if (viaButton.current || downloading) return;
+      if (viaButton.current) return;
       void printInvoiceAction(id, true);
     };
     window.addEventListener("beforeprint", before);
