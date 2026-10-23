@@ -659,10 +659,13 @@ input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
 .chip-x { border: 0; background: none; padding: 0; color: inherit; display: inline-flex; cursor: pointer; }
 .chip-x:hover { color: #b42318; }
 @media print {
-  body:has(.sj) .side { display: none; }
-  body:has(.sj) .app { display: block; }
-  body:has(.sj) .main { padding: 0; margin: 0; max-width: none; }
-  body:has(.sj) .dgrid { display: block; }
+  /* Cetak langsung dari halaman detail/Surat Jalan: hanya kertas dokumen yang ikut tercetak. */
+  body:has(.dgrid > .inv-wrap) .side,
+  .main:has(.dgrid > .inv-wrap) > :not(.dgrid),
+  .dgrid:has(> .inv-wrap) > :not(.inv-wrap) { display: none !important; }
+  body:has(.dgrid > .inv-wrap) .app { display: block; }
+  body:has(.dgrid > .inv-wrap) .main { padding: 0; margin: 0; max-width: none; }
+  .dgrid:has(> .inv-wrap) { display: block; }
   /* Spasi dirapatkan agar muat 1 lembar; tanda tangan tetap cukup ruang. */
   .sj-logo { margin-bottom: 8pt; }
   .sj-info { margin-top: 16pt; }

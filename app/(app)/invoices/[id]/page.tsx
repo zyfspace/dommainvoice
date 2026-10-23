@@ -96,7 +96,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
 
       <div className="dgrid">
         <div className="dpanels">
-          <InvoiceActions inv={inv} role={me.role} group={group} meId={me.id} />
+          <InvoiceActions inv={inv} role={me.role} group={group} />
           <InvoiceGroup current={inv} group={group} />
           <PaymentsPanel inv={inv} role={me.role} />
 

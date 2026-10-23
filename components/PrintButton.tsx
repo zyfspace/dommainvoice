@@ -6,11 +6,19 @@ import { Icon } from "./Icon";
 import { PrintConfirm } from "./PrintConfirm";
 
 /**
- * Tombol cetak invoice. Sebelum dialog print dibuka, cetak dicatat di server:
- * kalau admin lain sudah mencetak duluan, muncul konfirmasi dulu.
- * `confirmed`: user sudah konfirmasi cetak ulang dari halaman detail (?reprint=1).
+ * Tombol cetak invoice: dialog print dibuka di halaman yang sama, tanpa tab baru.
+ * Sebelum dialog dibuka, cetak dicatat di server; kalau admin lain sudah mencetak duluan,
+ * muncul konfirmasi dulu. `confirmed`: cetak ulang sudah dikonfirmasi (?reprint=1).
  */
-export function PrintButton({ id, confirmed = false }: { id: string; confirmed?: boolean }) {
+export function PrintButton({
+  id,
+  confirmed = false,
+  small = false,
+}: {
+  id: string;
+  confirmed?: boolean;
+  small?: boolean;
+}) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [conflict, setConflict] = useState<{ name: string; at: string } | null>(null);
@@ -44,8 +52,13 @@ export function PrintButton({ id, confirmed = false }: { id: string; confirmed?:
 
   return (
     <>
-      <button className="btn pri" onClick={() => run(confirmed)} disabled={busy}>
-        <Icon n="printer" /> {busy ? "Memproses…" : "Cetak / Simpan PDF"}
+      <button
+        className={small ? "btn sm" : "btn pri"}
+        style={small ? { flex: 1 } : undefined}
+        onClick={() => run(confirmed)}
+        disabled={busy}
+      >
+        <Icon n="printer" s={small ? 14 : undefined} /> {busy ? "Memproses…" : small ? "Cetak" : "Cetak / Simpan PDF"}
       </button>
       {err && <span className="err" style={{ margin: 0 }}>{err}</span>}
       {conflict && (
