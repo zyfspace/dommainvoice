@@ -6,7 +6,7 @@
   - Headings: Manrope (`--f-manrope`, Google Fonts)
   - Numerics/Tabular: DM Sans (`--f-dmsans`, Google Fonts)
 - Type Scale:
-  - 11px: Micro (chart labels, tag pills, count badges, microcopy)
+  - 11px: Micro (chart labels, tags, count badges, microcopy)
   - 12px: Meta & controls (labels, hints, subtitles, breadcrumbs, table headers, compact buttons, segmented toggles, tabs)
   - 13px: UI Body & table data (regular buttons, inputs on desktop, table cells, paragraph text)
   - 14px: Section titles (`.panel h3`, `.card h3`, modal titles)
@@ -37,9 +37,10 @@
 - Cancelled: `#667085` (strikethrough slate)
 
 ## Radius
-- Buttons, inputs, chips: 6px - 8px
-- Panels, cards, tables wrapper: 12px
-- Status pills, tags, search bars: 99px
+- Tidak ada bentuk pill (99px). Sudut tipis dan tegas.
+- Panels, cards, tables wrapper, banner: 8px
+- Buttons, inputs, search, chips, tags, status: 6px
+- Count badge, segmented button di dalam: 4px
 
 ## Spacing & Container
 - Desktop sidebar width: 232px
