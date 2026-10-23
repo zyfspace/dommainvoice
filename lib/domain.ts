@@ -55,8 +55,8 @@ export const DELETABLE: InvoiceStatus[] = ["draft", "revision_requested", "rejec
 export const CANCELLABLE: InvoiceStatus[] = ["on_check", "approved", "issued"];
 /** Bukti transfer bisa diupload setelah invoice disetujui/terbit. DP & pelunasan = invoice terpisah. */
 export const PAYABLE: InvoiceStatus[] = ["approved", "issued"];
-/** Status yang cetaknya dicatat (sudah di-approve Finance). Status lain dianggap pratinjau. */
-export const PRINT_TRACKED: InvoiceStatus[] = ["approved", "issued", "paid"];
+/** Status yang boleh dicetak (sudah di-approve Finance). Cetaknya dicatat. */
+export const PRINTABLE: InvoiceStatus[] = ["approved", "issued", "paid"];
 
 /**
  * Nilai satu invoice untuk daftar & rekap: grup DP memakai nominal bagiannya (DP / Pelunasan)
@@ -81,6 +81,31 @@ export function installmentLabel(inv: Pick<Invoice, "payment_type" | "installmen
   if (inv.payment_type === "dp") return inv.installment === 1 ? "DP" : "Pelunasan";
   return `Termin ${inv.installment}`;
 }
+
+/** Baris tabel invoice: invoice tunggal, atau grup DP / Termin (≥ 2 tahap yang terlihat). */
+export type InvoiceEntry<T extends Invoice = Invoice> =
+  | { kind: "single"; inv: T }
+  | { kind: "group"; id: string; items: T[] };
+
+/** Kelompokkan invoice per group_id, urutan mengikuti kemunculan pertama. Grup 1 tahap tetap tampil tunggal. */
+export function groupInvoices<T extends Invoice>(rows: T[]): InvoiceEntry<T>[] {
+  const groups = new Map<string, T[]>();
+  for (const r of rows) if (r.group_id) groups.set(r.group_id, [...(groups.get(r.group_id) ?? []), r]);
+  const out: InvoiceEntry<T>[] = [];
+  const seen = new Set<string>();
+  for (const r of rows) {
+    const g = r.group_id ? groups.get(r.group_id)! : null;
+    if (!g || g.length < 2) out.push({ kind: "single", inv: r });
+    else if (!seen.has(r.group_id!)) {
+      seen.add(r.group_id!);
+      out.push({ kind: "group", id: r.group_id!, items: [...g].sort((a, b) => (a.installment ?? 0) - (b.installment ?? 0)) });
+    }
+  }
+  return out;
+}
+
+export const flattenEntries = <T extends Invoice>(e: InvoiceEntry<T>[]) =>
+  e.flatMap((x) => (x.kind === "single" ? [x.inv] : x.items));
 
 type GroupMember = Pick<Invoice, "id" | "status" | "installment" | "delivery_gate">;
 
@@ -136,14 +161,6 @@ export function longDateEn(d: string) {
     new Date(d.slice(0, 10) + "T00:00:00Z"),
   );
 }
-
-/** Term of payment default per payment type (bisa diubah per invoice). */
-export const DEFAULT_TERM: Record<PaymentType, string> = {
-  cbd: "Pembayaran penuh sebelum barang dikirim",
-  dp: "50% DP untuk proses pengerjaan, 50% sebelum delivery",
-  termin: "",
-  top: "",
-};
 
 /** 2026-10-16 → 16 Oktober 2026 (Surat Jalan) */
 export function longDateId(d: string) {

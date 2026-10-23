@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { isOverdue } from "@/lib/domain";
+import { flattenEntries, groupInvoices, isOverdue } from "@/lib/domain";
 import type { Invoice, InvoiceStatus } from "@/lib/types";
 import { Icon } from "./Icon";
 import { InvoiceTable } from "./InvoiceTable";
@@ -39,10 +39,12 @@ export function DashInvoices({ rows, todo }: { rows: Invoice[]; todo: InvoiceSta
     );
   }, [rows, tabs, tab, q]);
 
-  const pages = Math.max(1, Math.ceil(list.length / PAGE));
+  // Paging per baris tabel: grup DP / Termin dihitung satu baris supaya tidak terpotong antar halaman.
+  const entries = useMemo(() => groupInvoices(list), [list]);
+  const pages = Math.max(1, Math.ceil(entries.length / PAGE));
   const cur = Math.min(page, pages);
-  const from = list.length ? (cur - 1) * PAGE + 1 : 0;
-  const to = Math.min(cur * PAGE, list.length);
+  const from = entries.length ? (cur - 1) * PAGE + 1 : 0;
+  const to = Math.min(cur * PAGE, entries.length);
   const nums = Array.from({ length: pages }, (_, k) => k + 1).filter((p) => p === 1 || p === pages || Math.abs(p - cur) <= 1);
 
   return (
@@ -61,12 +63,13 @@ export function DashInvoices({ rows, todo }: { rows: Invoice[]; todo: InvoiceSta
         </label>
       </div>
       <InvoiceTable
-        rows={list.slice((cur - 1) * PAGE, cur * PAGE)}
+        rows={flattenEntries(entries.slice((cur - 1) * PAGE, cur * PAGE))}
         empty={<div className="empty"><b>Tidak ada invoice</b>Tidak ada yang cocok dengan filter ini.</div>}
       />
       <div className="dash-foot">
         <span>
-          <b className="num">{from}–{to}</b> dari <b className="num">{list.length}</b> invoice
+          <b className="num">{from}–{to}</b> dari <b className="num">{entries.length}</b> baris
+          {entries.length !== list.length && <> · {list.length} invoice</>}
         </span>
         <div className="pager">
           <button disabled={cur === 1} onClick={() => setPage(cur - 1)} aria-label="Sebelumnya">‹</button>

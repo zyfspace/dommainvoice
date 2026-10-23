@@ -1,4 +1,4 @@
-import { PRINT_TRACKED, STATUS_LABEL, fmtPrinted } from "@/lib/domain";
+import { PRINTABLE, STATUS_LABEL, fmtPrinted } from "@/lib/domain";
 import type { Invoice, InvoiceStatus } from "@/lib/types";
 import { Icon } from "./Icon";
 
@@ -32,7 +32,7 @@ export function StatusPair({ inv, lg }: { inv: Pick<Invoice, "status" | "issued_
 
 /** Status cetak invoice yang sudah di-approve. Status lain: "—". */
 export function PrintStatus({ inv }: { inv: Pick<Invoice, "status" | "printed_at" | "printed_by_name"> }) {
-  if (!PRINT_TRACKED.includes(inv.status)) return <span className="mut">—</span>;
+  if (!PRINTABLE.includes(inv.status)) return <span className="mut">—</span>;
   if (!inv.printed_at) return <span className="pst">Belum dicetak</span>;
   return (
     <span className="pst done" title={`Dicetak oleh ${inv.printed_by_name ?? "—"}, ${fmtPrinted(inv.printed_at)}`}>

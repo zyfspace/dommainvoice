@@ -6,7 +6,7 @@ import {
   EDITABLE,
   PAYABLE,
   PAYMENT_ROLES,
-  PRINT_TRACKED,
+  PRINTABLE,
   SURAT_JALAN_ROLES,
   invoiceDue,
   rupiah,
@@ -525,17 +525,22 @@ export type PrintResult = { ok: true } | { conflict: { name: string; at: string 
  */
 export async function recordPrint(actor: Profile | null, id: string, force: boolean): Promise<PrintResult> {
   if (!actor) throw new ServiceError("Sesi berakhir, silakan login ulang.");
+  const before = await repo.getInvoice(id);
+  if (!before) throw new ServiceError("Invoice tidak ditemukan.");
+  if (!PRINTABLE.includes(before.status))
+    throw new ServiceError("Invoice belum di-approve Finance, belum bisa dicetak.");
   const at = new Date().toISOString();
   const name = actor.full_name || actor.email;
-  const claimed = await repo.claimPrint(id, { printed_at: at, printed_by: actor.id, printed_by_name: name }, PRINT_TRACKED);
+  const claimed = await repo.claimPrint(id, { printed_at: at, printed_by: actor.id, printed_by_name: name }, PRINTABLE);
   if (claimed) {
     await log(claimed, actor, "printed", null, null);
     return { ok: true };
   }
   const inv = await repo.getInvoice(id);
   if (!inv) throw new ServiceError("Invoice tidak ditemukan.");
-  // Status di luar Approved/Issued/Paid (mis. draft) hanya pratinjau, tidak dicatat.
-  if (!PRINT_TRACKED.includes(inv.status) || !inv.printed_at) return { ok: true };
+  // Status berubah di antara cek & klaim (mis. dibatalkan).
+  if (!PRINTABLE.includes(inv.status)) throw new ServiceError("Invoice ini tidak bisa dicetak.");
+  if (!inv.printed_at) return { ok: true };
   if (inv.printed_by !== actor.id && !force)
     return { conflict: { name: inv.printed_by_name ?? "admin lain", at: inv.printed_at } };
   await log(inv, actor, "reprinted", null, null);
