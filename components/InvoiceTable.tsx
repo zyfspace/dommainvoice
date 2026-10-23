@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { fmtDate, installmentLabel, invoiceAmount, isOverdue, rupiah } from "@/lib/domain";
 import type { Invoice } from "@/lib/types";
-import { StatusPair } from "./Status";
+import { PrintStatus, StatusPair } from "./Status";
 
 export function InvoiceTable({ rows, empty }: { rows: Invoice[]; empty?: React.ReactNode }) {
   if (!rows.length)
     return <div className="tw">{empty ?? <div className="empty"><b>Belum ada invoice</b>Invoice yang dibuat akan tampil di sini.</div>}</div>;
   return (
     <div className="tw">
-      <table className="t">
+      <table className="t t-inv">
         <thead>
           <tr>
             <th>No. Invoice</th>
@@ -18,6 +18,7 @@ export function InvoiceTable({ rows, empty }: { rows: Invoice[]; empty?: React.R
             <th>Penerbit</th>
             <th>Total</th>
             <th>Status</th>
+            <th>Cetak</th>
           </tr>
         </thead>
         <tbody>
@@ -43,6 +44,7 @@ export function InvoiceTable({ rows, empty }: { rows: Invoice[]; empty?: React.R
               <td className="mut">{(i.entity ?? "dts").toUpperCase()}</td>
               <td className="num">{rupiah(invoiceAmount(i))}</td>
               <td><StatusPair inv={i} /></td>
+              <td><PrintStatus inv={i} /></td>
             </tr>
           ))}
         </tbody>

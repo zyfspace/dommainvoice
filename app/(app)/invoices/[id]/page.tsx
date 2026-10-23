@@ -22,6 +22,8 @@ const ACTION_LABEL: Record<string, string> = {
   issued: "PDF diterbitkan (n8n)",
   issued_manual: "Ditandai Issued manual",
   paid: "Bukti pembayaran diupload — Paid",
+  printed: "Invoice dicetak",
+  reprinted: "Invoice dicetak ulang",
   email_sent: "Email terkirim",
   sheets_synced: "Tersinkron ke Google Sheets",
   workflow_failed: "Workflow n8n gagal",
@@ -94,7 +96,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
 
       <div className="dgrid">
         <div className="dpanels">
-          <InvoiceActions inv={inv} role={me.role} group={group} />
+          <InvoiceActions inv={inv} role={me.role} group={group} meId={me.id} />
           <InvoiceGroup current={inv} group={group} />
           <PaymentsPanel inv={inv} role={me.role} />
 

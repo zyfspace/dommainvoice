@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import {
   cancelAction,
   deleteInvoiceAction,
@@ -10,9 +10,11 @@ import {
   submitInvoiceAction,
   type FormState,
 } from "@/app/actions";
-import { CANCELLABLE, DELETABLE, EDITABLE, SURAT_JALAN_ROLES, deliveryGate, installmentLabel, suratJalanReady } from "@/lib/domain";
+import { CANCELLABLE, DELETABLE, EDITABLE, PRINT_TRACKED, SURAT_JALAN_ROLES, deliveryGate, installmentLabel, suratJalanReady } from "@/lib/domain";
 import type { Invoice, Role } from "@/lib/types";
 import { Icon } from "./Icon";
+import { PrintConfirm } from "./PrintConfirm";
+import { PrintedNote } from "./Status";
 
 function Msg({ s }: { s: FormState }) {
   if (s?.error) return <div className="err" style={{ marginTop: 10, marginBottom: 0 }}>{s.error}</div>;
@@ -122,7 +124,42 @@ function IssueManual({ id }: { id: string }) {
   );
 }
 
-export function InvoiceActions({ inv, role, group }: { inv: Invoice; role: Role; group: Invoice[] }) {
+/** Link ke halaman cetak. Sudah dicetak admin lain → konfirmasi dulu sebelum dibuka. */
+function PrintLink({ inv, meId }: { inv: Invoice; meId: string }) {
+  const [ask, setAsk] = useState(false);
+  const href = `/invoices/${inv.id}/print`;
+  const other = inv.printed_at && inv.printed_by !== meId;
+  return (
+    <>
+      <a
+        href={href}
+        target="_blank"
+        className="btn sm"
+        style={{ flex: 1 }}
+        onClick={(e) => {
+          if (!other) return;
+          e.preventDefault();
+          setAsk(true);
+        }}
+      >
+        <Icon n="printer" s={14} /> Cetak
+      </a>
+      {ask && inv.printed_at && (
+        <PrintConfirm
+          name={inv.printed_by_name ?? "admin lain"}
+          at={inv.printed_at}
+          onNo={() => setAsk(false)}
+          onYes={() => {
+            setAsk(false);
+            window.open(`${href}?reprint=1`, "_blank");
+          }}
+        />
+      )}
+    </>
+  );
+}
+
+export function InvoiceActions({ inv, role, group, meId }: { inv: Invoice; role: Role; group: Invoice[]; meId: string }) {
   const adminCan = role === "admin" && EDITABLE.includes(inv.status);
   const financeReview = role === "finance" && inv.status === "on_check";
   const financeOther = role === "finance" && CANCELLABLE.includes(inv.status);
@@ -206,15 +243,16 @@ export function InvoiceActions({ inv, role, group }: { inv: Invoice; role: Role;
         )}
 
         <div style={{ display: "flex", gap: 8, borderTop: "1px solid var(--line)", paddingTop: 12, marginTop: 4 }}>
-          <a href={`/invoices/${inv.id}/print`} target="_blank" className="btn sm" style={{ flex: 1 }}>
-            <Icon n="printer" s={14} /> Cetak
-          </a>
+          <PrintLink inv={inv} meId={meId} />
           {(inv.status === "issued" || inv.status === "paid") && inv.pdf_url && (
             <a href={inv.pdf_url} target="_blank" rel="noreferrer" className="btn sm pri" style={{ flex: 1 }}>
               <Icon n="download" s={14} /> PDF
             </a>
           )}
         </div>
+        {inv.printed_at && PRINT_TRACKED.includes(inv.status) && (
+          <PrintedNote name={inv.printed_by_name} at={inv.printed_at} />
+        )}
 
         {DELETABLE.includes(inv.status) && <Delete id={inv.id} />}
       </div>

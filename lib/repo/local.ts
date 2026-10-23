@@ -285,6 +285,14 @@ export const localRepo: Repo = {
       return true;
     }),
 
+  claimPrint: (id, data, expect) =>
+    tx((db) => {
+      const inv = db.invoices.find((x) => x.id === id);
+      if (!inv || !expect.includes(inv.status) || inv.printed_at) return null;
+      Object.assign(inv, data);
+      return { ...inv };
+    }),
+
   insertEvent: (e) =>
     tx((db) => {
       db.events.push({ ...e, id: randomUUID(), created_at: now() });

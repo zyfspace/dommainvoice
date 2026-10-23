@@ -113,6 +113,10 @@ export interface Invoice {
   installment: number | null;
   /** Tahap syarat kirim: Surat Jalan bisa dicetak setelah tahap ini & sebelumnya Paid. */
   delivery_gate: boolean;
+  /** Cetak pertama setelah approve: kapan & oleh siapa (null = belum dicetak). */
+  printed_at: string | null;
+  printed_by: string | null;
+  printed_by_name: string | null;
   created_at: string;
   updated_at: string;
 }
