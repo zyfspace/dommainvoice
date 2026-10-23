@@ -415,9 +415,15 @@ export async function financeDecision(actor: Profile | null, id: string, action:
       claimed.push(c);
     }
     // Normalnya nomor sudah terbit saat diajukan; ini fallback untuk invoice lama.
+    const finance = await financeEmails();
     for (const inv of await assignNumbers(claimed)) {
       await log(inv, actor, "approved", "on_check", "approved", notes ?? `Nomor ${inv.invoice_number}`);
-      await emit("invoice.approved", inv, { approved_by: actor.email, notify_emails: creatorEmails(inv) });
+      await emit("invoice.approved", inv, {
+        approved_by: actor.email,
+        approved_by_name: actor.full_name ?? null,
+        notify_emails: creatorEmails(inv),
+        finance_emails: finance,
+      });
     }
     return;
   }
