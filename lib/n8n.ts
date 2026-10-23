@@ -1,5 +1,5 @@
 import "server-only";
-import { randomUUID } from "node:crypto";
+import { createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 import { repo } from "./repo";
 import type { Invoice, WebhookEvent } from "./types";
 
@@ -83,4 +83,30 @@ export async function deliver(w: Pick<WebhookEvent, "id" | "event_type" | "paylo
 export function verifyCallback(req: Request) {
   const expected = process.env.N8N_CALLBACK_SECRET;
   return Boolean(expected) && req.headers.get("x-domma-secret") === expected;
+}
+
+/**
+ * Token sementara agar n8n bisa merender halaman cetak invoice menjadi PDF tanpa sesi login.
+ * Format: "<exp unix detik>.<hmac sha256>" ditandatangani dengan N8N_CALLBACK_SECRET, terikat ke 1 invoice.
+ */
+export function printToken(invoiceId: string, ttlSeconds = 15 * 60) {
+  const secret = process.env.N8N_CALLBACK_SECRET;
+  if (!secret) return null;
+  const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
+  return `${exp}.${signPrint(secret, invoiceId, exp)}`;
+}
+
+export function verifyPrintToken(invoiceId: string, token: string | null | undefined) {
+  const secret = process.env.N8N_CALLBACK_SECRET;
+  if (!secret || !token) return false;
+  const [expRaw, sig] = token.split(".");
+  const exp = Number(expRaw);
+  if (!sig || !Number.isInteger(exp) || exp < Math.floor(Date.now() / 1000)) return false;
+  const expected = Buffer.from(signPrint(secret, invoiceId, exp));
+  const given = Buffer.from(sig);
+  return expected.length === given.length && timingSafeEqual(expected, given);
+}
+
+function signPrint(secret: string, invoiceId: string, exp: number) {
+  return createHmac("sha256", secret).update(`print:${invoiceId}:${exp}`).digest("hex");
 }
