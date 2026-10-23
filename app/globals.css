@@ -516,13 +516,14 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .pic-row { grid-template-columns: 1fr 1fr; }
   .term { grid-template-columns: 64px 80px 12px minmax(0, 1fr) 30px; gap: 6px; }
   .kv { flex-wrap: wrap; }
-  .login { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-  .login-art { padding: 20px 16px 22px; min-height: auto; gap: 14px; }
-  .login-art h2 { font-size: 18px; }
+  /* Mobile: dua bagian atas-bawah dengan tinggi seimbang. */
+  .login { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; min-height: 100svh; }
+  .login-art { padding: 28px 20px; min-height: 0; gap: 20px; }
+  .login-art h2 { font-size: 20px; }
   .login-art p { font-size: 13px; margin-top: 8px; }
-  .login-art .flow { margin-top: 14px; gap: 6px; }
-  .login-art small { display: none; }
-  .login-form { place-items: start center; padding: 28px 16px 40px; }
+  .login-art .flow { margin-top: 18px; gap: 6px; }
+  .login-art > small { display: block; }
+  .login-form { place-items: center; padding: 28px 20px calc(28px + env(safe-area-inset-bottom)); }
   .login-form .sub { margin-bottom: 18px; }
   /* Input 13px sama dengan body: zoom otomatis iOS dicegah lewat viewport (lihat app/layout.tsx). */
   .in, .f input, .f select, .f textarea, .rich-line, .rich-view, .search input { font-size: 13px; }
