@@ -82,6 +82,31 @@ export function installmentLabel(inv: Pick<Invoice, "payment_type" | "installmen
   return `Termin ${inv.installment}`;
 }
 
+/** Baris tabel invoice: invoice tunggal, atau grup DP / Termin (≥ 2 tahap yang terlihat). */
+export type InvoiceEntry<T extends Invoice = Invoice> =
+  | { kind: "single"; inv: T }
+  | { kind: "group"; id: string; items: T[] };
+
+/** Kelompokkan invoice per group_id, urutan mengikuti kemunculan pertama. Grup 1 tahap tetap tampil tunggal. */
+export function groupInvoices<T extends Invoice>(rows: T[]): InvoiceEntry<T>[] {
+  const groups = new Map<string, T[]>();
+  for (const r of rows) if (r.group_id) groups.set(r.group_id, [...(groups.get(r.group_id) ?? []), r]);
+  const out: InvoiceEntry<T>[] = [];
+  const seen = new Set<string>();
+  for (const r of rows) {
+    const g = r.group_id ? groups.get(r.group_id)! : null;
+    if (!g || g.length < 2) out.push({ kind: "single", inv: r });
+    else if (!seen.has(r.group_id!)) {
+      seen.add(r.group_id!);
+      out.push({ kind: "group", id: r.group_id!, items: [...g].sort((a, b) => (a.installment ?? 0) - (b.installment ?? 0)) });
+    }
+  }
+  return out;
+}
+
+export const flattenEntries = <T extends Invoice>(e: InvoiceEntry<T>[]) =>
+  e.flatMap((x) => (x.kind === "single" ? [x.inv] : x.items));
+
 type GroupMember = Pick<Invoice, "id" | "status" | "installment" | "delivery_gate">;
 
 /** Tahap syarat kirim dalam grup; grup tanpa tanda memakai tahap terakhir. */

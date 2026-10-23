@@ -170,6 +170,15 @@ table.t.t-inv { min-width: 860px; }
 table.t.t-inv th, table.t.t-inv td { padding-left: 12px; padding-right: 12px; }
 table.t.t-inv th:first-child, table.t.t-inv td:first-child { padding-left: 16px; }
 table.t.t-inv th:last-child, table.t.t-inv td:last-child { padding-right: 16px; }
+/* Grup DP / Termin: satu baris induk, tahap-tahapnya muncul saat dibuka. */
+.t-group { cursor: pointer; }
+.t-group.open td { background: var(--soft); }
+.t-toggle { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; background: none; font: inherit; font-weight: 500; color: var(--ink); cursor: pointer; }
+.t-toggle svg { color: var(--mut); transition: transform 0.15s; }
+.t-group.open .t-toggle svg { transform: rotate(90deg); }
+.t-toggle .tag { font-weight: 400; }
+.t tr.t-child td { background: var(--soft); }
+table.t.t-inv tr.t-child td:first-child { padding-left: 36px; }
 .t th { text-align: left; color: var(--mut); font-size: 12px; font-weight: 500; padding: 10px 16px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--soft); }
 .t td { padding: 12px 16px; border-bottom: 1px solid var(--line); white-space: nowrap; font-size: 13px; }
 .t td .mut { font-size: 12px; }
