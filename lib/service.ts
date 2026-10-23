@@ -6,6 +6,7 @@ import {
   EDITABLE,
   PAYABLE,
   PAYMENT_ROLES,
+  PRINT_TRACKED,
   SURAT_JALAN_ROLES,
   invoiceDue,
   rupiah,
@@ -251,6 +252,9 @@ const blankState = {
   issued_at: null,
   cancelled_at: null,
   cancel_reason: null,
+  printed_at: null,
+  printed_by: null,
+  printed_by_name: null,
 };
 
 export async function createInvoice(actor: Profile | null, input: InvoiceInput, submit: boolean) {
@@ -508,6 +512,34 @@ export async function markIssued(
   if (!inv) throw new ServiceError("Invoice harus berstatus Approved untuk diterbitkan.");
   await log(inv, actor, actor ? "issued_manual" : "issued", "approved", "issued", data.pdf_url);
   return inv;
+}
+
+// ── Cetak ─────────────────────────────────────────────────
+
+export type PrintResult = { ok: true } | { conflict: { name: string; at: string } };
+
+/**
+ * Catat cetak invoice yang sudah di-approve. Cetak pertama diklaim atomik (printed_at masih kosong),
+ * jadi dua admin yang klik bersamaan tidak sama-sama tercatat sebagai pencetak pertama.
+ * Sudah dicetak orang lain → kembalikan conflict, kecuali `force` (user sudah konfirmasi cetak ulang).
+ */
+export async function recordPrint(actor: Profile | null, id: string, force: boolean): Promise<PrintResult> {
+  if (!actor) throw new ServiceError("Sesi berakhir, silakan login ulang.");
+  const at = new Date().toISOString();
+  const name = actor.full_name || actor.email;
+  const claimed = await repo.claimPrint(id, { printed_at: at, printed_by: actor.id, printed_by_name: name }, PRINT_TRACKED);
+  if (claimed) {
+    await log(claimed, actor, "printed", null, null);
+    return { ok: true };
+  }
+  const inv = await repo.getInvoice(id);
+  if (!inv) throw new ServiceError("Invoice tidak ditemukan.");
+  // Status di luar Approved/Issued/Paid (mis. draft) hanya pratinjau, tidak dicatat.
+  if (!PRINT_TRACKED.includes(inv.status) || !inv.printed_at) return { ok: true };
+  if (inv.printed_by !== actor.id && !force)
+    return { conflict: { name: inv.printed_by_name ?? "admin lain", at: inv.printed_at } };
+  await log(inv, actor, "reprinted", null, null);
+  return { ok: true };
 }
 
 // ── Pembayaran ────────────────────────────────────────────

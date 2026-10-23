@@ -14,6 +14,7 @@ import {
   financeDecision,
   markIssued,
   recordPayment,
+  recordPrint,
   savePreparers,
   saveCustomer,
   savePricelistSeries,
@@ -21,6 +22,7 @@ import {
   updateInvoice,
   type FinanceAction,
   type InvoiceInput,
+  type PrintResult,
 } from "@/lib/service";
 import type { SeriesPrice } from "@/lib/pricelist";
 import type { PicInput } from "@/lib/types";
@@ -191,6 +193,18 @@ export async function issueManualAction(_: FormState, fd: FormData): Promise<For
   if (res) return res;
   revalidatePath("/", "layout");
   return { ok: "Invoice ditandai Issued." };
+}
+
+/** Dipanggil tombol cetak sebelum dialog print browser dibuka. */
+export async function printInvoiceAction(id: string, force: boolean): Promise<PrintResult | { error: string }> {
+  try {
+    const res = await recordPrint(await getProfile(), id, force);
+    revalidatePath("/", "layout");
+    return res;
+  } catch (e) {
+    if (e instanceof ServiceError) return { error: e.message };
+    throw e;
+  }
 }
 
 export async function recordPaymentAction(_: FormState, fd: FormData): Promise<FormState> {

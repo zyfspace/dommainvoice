@@ -166,6 +166,10 @@ select.in:disabled, .f select:disabled { cursor: not-allowed; opacity: 0.6; }
 
 .tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
 table.t { width: 100%; border-collapse: collapse; min-width: 760px; }
+table.t.t-inv { min-width: 860px; }
+table.t.t-inv th, table.t.t-inv td { padding-left: 12px; padding-right: 12px; }
+table.t.t-inv th:first-child, table.t.t-inv td:first-child { padding-left: 16px; }
+table.t.t-inv th:last-child, table.t.t-inv td:last-child { padding-right: 16px; }
 .t th { text-align: left; color: var(--mut); font-size: 12px; font-weight: 500; padding: 10px 16px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--soft); }
 .t td { padding: 12px 16px; border-bottom: 1px solid var(--line); white-space: nowrap; font-size: 13px; }
 .t td .mut { font-size: 12px; }
@@ -203,6 +207,17 @@ table.t.pl { table-layout: fixed; }
 .st-pair.lg .st-sep { display: none; }
 .st.rejected { --dot: #f04438; }
 .st.cancelled { --dot: #667085; text-decoration: line-through; }
+/* Status cetak: "Sudah" hijau tegas + ikon, "Belum" abu bergaris putus, supaya tidak tertukar sekilas. */
+.pst { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 6px; font-size: 12px; white-space: nowrap; color: var(--mut); border: 1px dashed color-mix(in srgb, var(--ink) 22%, var(--paper)); }
+.pst.done { color: #067647; background: #ecfdf3; border: 1px solid #abefc6; font-weight: 500; }
+.printed-note { display: flex; align-items: flex-start; gap: 8px; margin: 0; padding: 9px 11px; border-radius: 6px; font-size: 12px; line-height: 1.45; color: #067647; background: #ecfdf3; border: 1px solid #abefc6; }
+.printed-note svg { flex: none; margin-top: 1px; }
+.pv-back.cfm-back { align-items: center; z-index: 60; }
+.cfm { width: min(420px, 100%); background: var(--paper); border-radius: 10px; padding: 20px; box-shadow: 0 12px 40px color-mix(in srgb, var(--ink) 25%, transparent); }
+.cfm h3 { margin: 0 0 6px; font-size: 16px; }
+.cfm p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--mut); }
+.cfm p b { color: var(--ink); }
+.cfm-f { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
 .st.lg { font-size: 12px; font-weight: 500; padding: 3px 10px 3px 8px; border-radius: 6px; background: var(--tint); }
 
 /* ── Invoice form ──────────────────────────────────────── */
@@ -560,6 +575,8 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .f > .seg button { height: 34px; overflow: hidden; text-overflow: ellipsis; }
   .pv-back { padding: 0; }
   .pv { border-radius: 0; min-height: 100%; padding: 12px; }
+  .pv-back.cfm-back { padding: 16px; }
+  .cfm-f .btn { flex: 1; }
   .grp-k { width: 52px; }
 }
 

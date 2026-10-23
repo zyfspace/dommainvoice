@@ -48,6 +48,15 @@ export interface Repo {
     patch: Partial<NewInvoice>,
     opts?: { expect?: InvoiceStatus[]; items?: NewItem[] },
   ): Promise<Invoice | null>;
+  /**
+   * Klaim cetak pertama: isi printed_* hanya jika status ada di `expect` dan printed_at masih kosong.
+   * null jika sudah dicetak / status tidak cocok.
+   */
+  claimPrint(
+    id: string,
+    data: Pick<Invoice, "printed_at" | "printed_by" | "printed_by_name">,
+    expect: InvoiceStatus[],
+  ): Promise<Invoice | null>;
   /** Hapus permanen (item, riwayat & webhook ikut terhapus). Hanya jika status ada di `expect`. */
   deleteInvoice(id: string, expect: InvoiceStatus[]): Promise<boolean>;
   insertEvent(e: Omit<InvoiceEvent, "id" | "created_at">): Promise<void>;

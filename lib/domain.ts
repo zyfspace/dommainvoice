@@ -55,6 +55,8 @@ export const DELETABLE: InvoiceStatus[] = ["draft", "revision_requested", "rejec
 export const CANCELLABLE: InvoiceStatus[] = ["on_check", "approved", "issued"];
 /** Bukti transfer bisa diupload setelah invoice disetujui/terbit. DP & pelunasan = invoice terpisah. */
 export const PAYABLE: InvoiceStatus[] = ["approved", "issued"];
+/** Status yang cetaknya dicatat (sudah di-approve Finance). Status lain dianggap pratinjau. */
+export const PRINT_TRACKED: InvoiceStatus[] = ["approved", "issued", "paid"];
 
 /**
  * Nilai satu invoice untuk daftar & rekap: grup DP memakai nominal bagiannya (DP / Pelunasan)
@@ -169,6 +171,14 @@ export function fmtDateTime(d: string | null | undefined) {
     minute: "2-digit",
     timeZone: "Asia/Jakarta",
   }).format(new Date(d));
+}
+
+/** "23 Okt 2026 pukul 15.32" (WIB), untuk catatan cetak. */
+export function fmtPrinted(d: string) {
+  const tz = { timeZone: "Asia/Jakarta" } as const;
+  const date = new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "short", year: "numeric", ...tz }).format(new Date(d));
+  const time = new Intl.DateTimeFormat("id-ID", { hour: "2-digit", minute: "2-digit", ...tz }).format(new Date(d));
+  return `${date} pukul ${time}`;
 }
 
 export function isOverdue(due: string, status: InvoiceStatus) {

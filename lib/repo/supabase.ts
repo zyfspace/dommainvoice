@@ -173,6 +173,13 @@ export const supabaseRepo: Repo = {
     return rows[0];
   },
 
+  async claimPrint(id, data, expect) {
+    const rows = must(
+      await db().from("invoices").update(data).eq("id", id).in("status", expect).is("printed_at", null).select(),
+    ) as Invoice[];
+    return rows[0] ?? null;
+  },
+
   async deleteInvoice(id, expect) {
     const proofs = must(await db().from("invoice_payments").select("proof_path").eq("invoice_id", id)) as { proof_path: string }[];
     const rows = must(await db().from("invoices").delete().eq("id", id).in("status", expect).select("id"));
