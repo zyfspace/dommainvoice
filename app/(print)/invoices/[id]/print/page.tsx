@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { InvoicePaper } from "@/components/InvoicePaper";
 import { PrintButton } from "@/components/PrintButton";
 import { PrintedNote } from "@/components/Status";
 import { invoiceFileName } from "@/lib/company";
+import { PRINTABLE, STATUS_LABEL } from "@/lib/domain";
 import { requireProfile } from "@/lib/auth";
 import { verifyPrintToken } from "@/lib/n8n";
 import { repo } from "@/lib/repo";
@@ -22,9 +24,24 @@ export default async function PrintPage({
   const { id } = await params;
   const { token, reprint } = await searchParams;
   // n8n merender halaman ini jadi PDF memakai token sementara dari GET /api/n8n/invoices/{id}.
-  if (!verifyPrintToken(id, token)) await requireProfile();
+  const viaN8n = verifyPrintToken(id, token);
+  if (!viaN8n) await requireProfile();
   const inv = await repo.getInvoice(id);
   if (!inv) notFound();
+  if (!viaN8n && !PRINTABLE.includes(inv.status))
+    return (
+      <div className="print-wrap">
+        <div className="empty">
+          <b>Invoice belum bisa dicetak</b>
+          Invoice berstatus {STATUS_LABEL[inv.status]}. Cetak tersedia setelah invoice di-approve Finance.
+          <div style={{ marginTop: 14 }}>
+            <Link href={`/invoices/${inv.id}`} className="btn sm">
+              Kembali ke invoice
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   return (
     <div className="print-wrap">
       <div className="print-bar">

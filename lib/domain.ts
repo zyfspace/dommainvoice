@@ -55,8 +55,8 @@ export const DELETABLE: InvoiceStatus[] = ["draft", "revision_requested", "rejec
 export const CANCELLABLE: InvoiceStatus[] = ["on_check", "approved", "issued"];
 /** Bukti transfer bisa diupload setelah invoice disetujui/terbit. DP & pelunasan = invoice terpisah. */
 export const PAYABLE: InvoiceStatus[] = ["approved", "issued"];
-/** Status yang cetaknya dicatat (sudah di-approve Finance). Status lain dianggap pratinjau. */
-export const PRINT_TRACKED: InvoiceStatus[] = ["approved", "issued", "paid"];
+/** Status yang boleh dicetak (sudah di-approve Finance). Cetaknya dicatat. */
+export const PRINTABLE: InvoiceStatus[] = ["approved", "issued", "paid"];
 
 /**
  * Nilai satu invoice untuk daftar & rekap: grup DP memakai nominal bagiannya (DP / Pelunasan)

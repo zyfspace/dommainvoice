@@ -10,7 +10,7 @@ import {
   submitInvoiceAction,
   type FormState,
 } from "@/app/actions";
-import { CANCELLABLE, DELETABLE, EDITABLE, PRINT_TRACKED, SURAT_JALAN_ROLES, deliveryGate, installmentLabel, suratJalanReady } from "@/lib/domain";
+import { CANCELLABLE, DELETABLE, EDITABLE, PRINTABLE, SURAT_JALAN_ROLES, deliveryGate, installmentLabel, suratJalanReady } from "@/lib/domain";
 import type { Invoice, Role } from "@/lib/types";
 import { Icon } from "./Icon";
 import { PrintConfirm } from "./PrintConfirm";
@@ -242,16 +242,18 @@ export function InvoiceActions({ inv, role, group, meId }: { inv: Invoice; role:
           </p>
         )}
 
-        <div style={{ display: "flex", gap: 8, borderTop: "1px solid var(--line)", paddingTop: 12, marginTop: 4 }}>
-          <PrintLink inv={inv} meId={meId} />
-          {(inv.status === "issued" || inv.status === "paid") && inv.pdf_url && (
-            <a href={inv.pdf_url} target="_blank" rel="noreferrer" className="btn sm pri" style={{ flex: 1 }}>
-              <Icon n="download" s={14} /> PDF
-            </a>
-          )}
-        </div>
-        {inv.printed_at && PRINT_TRACKED.includes(inv.status) && (
-          <PrintedNote name={inv.printed_by_name} at={inv.printed_at} />
+        {PRINTABLE.includes(inv.status) && (
+          <>
+            <div style={{ display: "flex", gap: 8, borderTop: "1px solid var(--line)", paddingTop: 12, marginTop: 4 }}>
+              <PrintLink inv={inv} meId={meId} />
+              {(inv.status === "issued" || inv.status === "paid") && inv.pdf_url && (
+                <a href={inv.pdf_url} target="_blank" rel="noreferrer" className="btn sm pri" style={{ flex: 1 }}>
+                  <Icon n="download" s={14} /> PDF
+                </a>
+              )}
+            </div>
+            {inv.printed_at && <PrintedNote name={inv.printed_by_name} at={inv.printed_at} />}
+          </>
         )}
 
         {DELETABLE.includes(inv.status) && <Delete id={inv.id} />}
