@@ -272,6 +272,10 @@ table.t.pl { table-layout: fixed; }
 .sum .row.total b { font-family: var(--font-head); font-size: 17px; letter-spacing: -0.02em; }
 .hint { display: block; font-size: 12px; line-height: 1.45; color: var(--mut); margin-top: 6px; }
 .actions { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+/* Download & Cetak invoice: dua tombol sama lebar, ikon + teks pendek. */
+.doc-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; }
+.doc-btns .btn { justify-content: center; min-width: 0; white-space: nowrap; }
+.doc-btns .err { grid-column: 1 / -1; }
 
 /* ── Detail ────────────────────────────────────────────── */
 .dgrid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
@@ -519,6 +523,7 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .crumb { margin-bottom: 6px; }
   .btn { height: 40px; }
   .btn.sm { height: 34px; }
+  .doc-btns .btn { height: 40px; font-size: 13px; }
   .search { width: 100%; order: 3; height: 40px; }
   .search.sm { width: 100%; height: 36px; }
   .panel { padding: 16px; }

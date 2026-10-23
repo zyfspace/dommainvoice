@@ -5,6 +5,34 @@ import { printInvoiceAction } from "@/app/actions";
 import { Icon } from "./Icon";
 import { PrintConfirm } from "./PrintConfirm";
 
+// Dialog print yang dibuka untuk "Download" (Save as PDF) tidak dicatat sebagai cetak.
+let downloading = false;
+
+/** Download invoice: PDF dari n8n kalau sudah terbit, selain itu dialog print untuk "Save as PDF". */
+export function DownloadButton({ pdfUrl }: { pdfUrl?: string | null }) {
+  if (pdfUrl)
+    return (
+      <a href={pdfUrl} target="_blank" rel="noreferrer" className="btn sm" download aria-label="Download invoice" title="Download invoice">
+        <Icon n="download" s={14} /> Invoice
+      </a>
+    );
+  return (
+    <button
+      type="button"
+      className="btn sm"
+      aria-label="Download invoice"
+      title="Download invoice"
+      onClick={() => {
+        downloading = true;
+        window.print();
+        downloading = false;
+      }}
+    >
+      <Icon n="download" s={14} /> Invoice
+    </button>
+  );
+}
+
 /**
  * Tombol cetak invoice: dialog print dibuka di halaman yang sama, tanpa tab baru.
  * Sebelum dialog dibuka, cetak dicatat di server; kalau admin lain sudah mencetak duluan,
@@ -27,7 +55,7 @@ export function PrintButton({
   // Ctrl+P / menu browser tetap tercatat (tanpa konfirmasi, dialog print sudah terbuka).
   useEffect(() => {
     const before = () => {
-      if (viaButton.current) return;
+      if (viaButton.current || downloading) return;
       void printInvoiceAction(id, true);
     };
     window.addEventListener("beforeprint", before);
@@ -54,11 +82,12 @@ export function PrintButton({
     <>
       <button
         className={small ? "btn sm" : "btn pri"}
-        style={small ? { flex: 1 } : undefined}
         onClick={() => run(confirmed)}
         disabled={busy}
+        aria-label={small ? "Cetak invoice" : undefined}
+        title={small ? "Cetak invoice" : undefined}
       >
-        <Icon n="printer" s={small ? 14 : undefined} /> {busy ? "Memproses…" : small ? "Cetak" : "Cetak / Simpan PDF"}
+        <Icon n="printer" s={small ? 14 : undefined} /> {busy ? "Memproses…" : small ? "Invoice" : "Cetak / Simpan PDF"}
       </button>
       {err && <span className="err" style={{ margin: 0 }}>{err}</span>}
       {conflict && (

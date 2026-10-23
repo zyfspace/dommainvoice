@@ -13,7 +13,7 @@ import {
 import { CANCELLABLE, DELETABLE, EDITABLE, PRINTABLE, SURAT_JALAN_ROLES, deliveryGate, installmentLabel, suratJalanReady } from "@/lib/domain";
 import type { Invoice, Role } from "@/lib/types";
 import { Icon } from "./Icon";
-import { PrintButton } from "./PrintButton";
+import { DownloadButton, PrintButton } from "./PrintButton";
 import { PrintedNote } from "./Status";
 
 function Msg({ s }: { s: FormState }) {
@@ -209,13 +209,9 @@ export function InvoiceActions({ inv, role, group }: { inv: Invoice; role: Role;
 
         {PRINTABLE.includes(inv.status) && (
           <>
-            <div style={{ display: "flex", gap: 8, borderTop: "1px solid var(--line)", paddingTop: 12, marginTop: 4 }}>
+            <div className="doc-btns">
+              <DownloadButton pdfUrl={inv.status === "issued" || inv.status === "paid" ? inv.pdf_url : null} />
               <PrintButton id={inv.id} small />
-              {(inv.status === "issued" || inv.status === "paid") && inv.pdf_url && (
-                <a href={inv.pdf_url} target="_blank" rel="noreferrer" className="btn sm pri" style={{ flex: 1 }}>
-                  <Icon n="download" s={14} /> PDF
-                </a>
-              )}
             </div>
             {inv.printed_at && <PrintedNote name={inv.printed_by_name} at={inv.printed_at} />}
           </>
