@@ -44,7 +44,7 @@
 ## Spacing & Container
 - Desktop sidebar width: 232px
 - Content container padding: 30px 40px 60px
-- Mobile breakpoint: 760px (single column, sticky top nav)
+- Mobile breakpoint: 760px (single column, header tipis di atas + tab bar menu di bawah)
 - Tablet breakpoint: 1100px (stats 2x2, stacked forms)
 - Compact button height: 30px (font-size: 12px)
 - Standard button / input height: 36px - 38px

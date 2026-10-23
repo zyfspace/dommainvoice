@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export async function generateViewport(): Promise<Viewport> {
   const ua = (await headers()).get("user-agent") ?? "";
   const ios = /iPhone|iPad|iPod/.test(ua);
-  return { themeColor: "#1d2939", width: "device-width", initialScale: 1, ...(ios && { maximumScale: 1 }) };
+  return { themeColor: "#1d2939", width: "device-width", initialScale: 1, viewportFit: "cover", ...(ios && { maximumScale: 1 }) };
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -59,6 +59,7 @@ input, select, textarea { font: inherit; color: inherit; }
 .brand-logo { display: block; height: 22px; width: auto; filter: brightness(0) invert(1); }
 .brand b { font-family: var(--font-head); font-weight: 700; font-size: 14px; letter-spacing: -0.02em; }
 .brand small { display: block; font-size: 11px; color: var(--navy-mut); margin-top: 4px; }
+.tabs { display: flex; flex-direction: column; gap: 2px; }
 .nav {
   display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px;
   color: var(--navy-mut); transition: 0.15s; white-space: nowrap;
@@ -432,20 +433,31 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   body { font-size: 13px; }
   h1, .top h1, .login-form h1 { font-size: 18px; }
   .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; align-content: start; }
+  /* Mobile: header tipis di atas (logo + keluar), menu utama jadi tab bar di bawah. */
   .side {
     position: sticky; top: 0; z-index: 20; height: auto; flex-direction: row; align-items: center;
-    padding: 8px 12px; gap: 2px; overflow-x: auto; scrollbar-width: none;
+    padding: 6px 8px 6px 14px; gap: 2px;
   }
-  .side::-webkit-scrollbar { display: none; }
-  .brand { padding: 0 6px 0 2px; flex: none; }
+  .brand { padding: 0; flex: none; }
   .brand-logo { height: 18px; }
   .brand small, .side-foot .who { display: none; }
   .side-foot { margin: 0 0 0 auto; border: 0; padding: 0; flex: none; }
-  .nav { position: relative; padding: 0; width: 40px; height: 40px; justify-content: center; flex: none; }
-  .nav em { position: absolute; top: 3px; right: 2px; margin: 0; font-size: 10px; padding: 0 5px; line-height: 15px; }
-  .nav span, .logout span { display: none; }
   .logout { width: 40px; height: 40px; justify-content: center; }
-  main.main { padding: 18px 16px 40px; }
+  .logout span { display: none; }
+  .tabs {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; flex-direction: row; gap: 0;
+    background: var(--navy); border-top: 1px solid var(--navy-line);
+    padding: 4px 4px calc(4px + env(safe-area-inset-bottom));
+  }
+  .tabs .nav {
+    position: relative; flex: 1 1 0; min-width: 0; flex-direction: column; justify-content: center; gap: 3px;
+    height: 52px; padding: 0 2px; border-radius: 10px; font-size: 10.5px; line-height: 1.2;
+  }
+  .tabs .nav span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .tabs .nav.on { background: none; }
+  .tabs .nav.on .i { color: var(--navy); background: var(--paper); border-radius: 99px; box-sizing: content-box; padding: 3px 14px; margin: -3px 0; }
+  .nav em { position: absolute; top: 3px; left: calc(50% + 8px); margin: 0; font-size: 10px; padding: 0 5px; line-height: 15px; }
+  main.main { padding: 18px 16px calc(84px + env(safe-area-inset-bottom)); }
   .top { gap: 10px; margin-bottom: 16px; }
   .top .btn { flex: 1 1 auto; }
   .crumb { margin-bottom: 6px; }
@@ -520,6 +532,7 @@ a.dstat.hl:hover { background: var(--navy-soft); }
 .print-wrap { max-width: 297mm; margin: 0 auto; padding: 24px 16px; }
 .print-bar { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 14px; }
 @media print {
+  .tabs { display: none !important; }
   /* Margin halaman = 0; margin dokumen ada di padding .inv (di-clone tiap halaman), jadi hasil cetak
      tidak bergantung pada setting Margins di dialog print browser/printer. */
   @page { size: A4 landscape; margin: 0; }
