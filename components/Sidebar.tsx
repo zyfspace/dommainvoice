@@ -25,13 +25,15 @@ export function Sidebar({ me, pending }: { me: Profile; pending: number }) {
           <small>Invoice Management</small>
         </div>
       </Link>
-      {NAV.map((n) => (
-        <Link key={n.href} href={n.href} className={`nav${on(n.href) ? " on" : ""}`} title={n.label}>
-          <Icon n={n.icon} />
-          <span>{n.label}</span>
-          {n.href === "/invoices" && pending > 0 && <em>{pending}</em>}
-        </Link>
-      ))}
+      <nav className="tabs" aria-label="Menu utama">
+        {NAV.map((n) => (
+          <Link key={n.href} href={n.href} className={`nav${on(n.href) ? " on" : ""}`} title={n.label} aria-current={on(n.href) ? "page" : undefined}>
+            <Icon n={n.icon} />
+            <span>{n.label}</span>
+            {n.href === "/invoices" && pending > 0 && <em>{pending}</em>}
+          </Link>
+        ))}
+      </nav>
       <div className="side-foot">
         <div className="who">
           <b>{me.full_name ?? me.email}</b>

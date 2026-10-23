@@ -10,7 +10,7 @@
   - 12px: Meta & controls (labels, hints, subtitles, breadcrumbs, table headers, compact buttons, segmented toggles, tabs)
   - 13px: UI Body & table data (regular buttons, inputs on desktop, table cells, paragraph text)
   - 14px: Section titles (`.panel h3`, `.card h3`, modal titles)
-  - 16px: Form inputs on mobile (to prevent iOS automatic zoom)
+  - Mobile (<760px): page titles 18px, metrics 17px, inputs 14px (iOS auto-zoom dicegah via `maximumScale` khusus iOS di `generateViewport`), tap target min. 40px
   - 17px: Prominent summary metrics (`.sum .row.total b`, mobile stat numbers)
   - 20px: Page titles (`.top h1`), primary metric figures (`.dstat b`)
   - 24px - 30px: Marketing headline (`.login-art h2`)
@@ -44,7 +44,7 @@
 ## Spacing & Container
 - Desktop sidebar width: 232px
 - Content container padding: 30px 40px 60px
-- Mobile breakpoint: 760px (single column, sticky top nav)
+- Mobile breakpoint: 760px (single column, header tipis di atas + tab bar menu di bawah)
 - Tablet breakpoint: 1100px (stats 2x2, stacked forms)
 - Compact button height: 30px (font-size: 12px)
 - Standard button / input height: 36px - 38px
@@ -56,5 +56,5 @@
 - Row 1 (Product & Type): SKU (120px) + Product (flex 1fr) + Customization (150px)
 - Row 2 (Commercials & Notes): Qty (75px) + UoM (75px) + Unit price (140px) + Catatan item (flex 1fr)
 - Mobile (<760px):
-  - Row 1: SKU (100px) + Product (flex 1fr); Customization full width
-  - Row 2: Qty (75px) + UoM (75px) + Unit price (flex 1fr); Catatan full width
+  - Row 1: SKU (96px) + Product (flex 1fr); Customization full width
+  - Row 2: Qty + UoM (1fr 1fr); Unit price & Catatan full width
