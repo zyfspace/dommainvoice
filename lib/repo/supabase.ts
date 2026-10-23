@@ -127,6 +127,7 @@ export const supabaseRepo: Repo = {
     inv.webhooks.sort((a, b) => b.created_at.localeCompare(a.created_at));
     inv.payments.sort((a, b) => a.created_at.localeCompare(b.created_at));
     for (const p of inv.payments) p.amount = Number(p.amount);
+    for (const i of inv.items) i.discount_percent = Number(i.discount_percent ?? 0);
     return inv;
   },
 

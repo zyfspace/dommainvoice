@@ -235,7 +235,7 @@ table.t.pl { table-layout: fixed; }
 .combo-list .combo-empty { color: var(--mut); cursor: default; font-size: 12px; padding: 8px 10px; }
 .item-row1, .item-row2 { display: grid; gap: 10px; }
 .item-row1 { grid-template-columns: 120px minmax(0, 1fr) 150px; margin-bottom: 10px; }
-.item-row2 { grid-template-columns: 75px 75px 140px minmax(0, 1fr); }
+.item-row2 { grid-template-columns: 75px 75px 140px 90px minmax(0, 1fr); }
 .seg { display: inline-grid; grid-auto-flow: column; border: 1px solid var(--line); border-radius: 6px; padding: 2px; gap: 2px; background: var(--paper); }
 .seg button { height: 28px; padding: 0 10px; border-radius: 4px; color: var(--mut); font-size: 12px; transition: 0.15s; white-space: nowrap; }
 .seg button.on { background: var(--navy); color: var(--paper); }
@@ -511,7 +511,7 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .item-row1 { grid-template-columns: 96px minmax(0, 1fr); gap: 8px; margin-bottom: 8px; }
   .item-row1 .f:last-child { grid-column: 1 / -1; }
   .item-row2 { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .item-row2 .f:nth-child(n + 3) { grid-column: 1 / -1; }
+  .item-row2 .f:nth-child(n + 5) { grid-column: 1 / -1; }
   .pay-row:not(.link) { display: grid; grid-template-columns: 96px minmax(0, 1fr) 30px; }
   .pay-row .pay-bank { width: auto !important; }
   .pay-row .pay-name { grid-column: 1 / 3; grid-row: 2; }

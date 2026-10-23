@@ -34,6 +34,8 @@ export function InvoicePaper({ inv }: { inv: InvoiceFull }) {
   const final = inv.status === "approved" || inv.status === "issued" || inv.status === "paid";
   const payable = inv.payable_percent ? Math.round((inv.total * inv.payable_percent) / 100) : null;
   const remarks = lines(inv.notes);
+  const hasDisc = inv.items.some((it) => it.discount_percent > 0);
+  const span = hasDisc ? 7 : 6;
   const payment = lines(inv.payment_info ?? e.payment);
 
   return (
@@ -95,10 +97,11 @@ export function InvoicePaper({ inv }: { inv: InvoiceFull }) {
           <colgroup>
             <col style={{ width: "6%" }} />
             <col style={{ width: "12.5%" }} />
-            <col style={{ width: "36.5%" }} />
+            <col style={{ width: hasDisc ? "29.5%" : "36.5%" }} />
             <col style={{ width: "8%" }} />
             <col style={{ width: "7%" }} />
             <col style={{ width: "14%" }} />
+            {hasDisc && <col style={{ width: "7%" }} />}
             <col style={{ width: "16%" }} />
           </colgroup>
           <thead>
@@ -109,6 +112,7 @@ export function InvoicePaper({ inv }: { inv: InvoiceFull }) {
               <th>Qty</th>
               <th>UoM</th>
               <th>Price</th>
+              {hasDisc && <th>Disc</th>}
               <th>Total Price</th>
             </tr>
           </thead>
@@ -125,6 +129,7 @@ export function InvoicePaper({ inv }: { inv: InvoiceFull }) {
                 <td className="c">{it.quantity.toLocaleString("en-US")}</td>
                 <td className="c">{it.uom ?? "Pcs"}</td>
                 <td className="c">{rpDoc(it.unit_price)}</td>
+                {hasDisc && <td className="c">{it.discount_percent ? `${it.discount_percent.toLocaleString("en-US")}%` : "-"}</td>}
                 <td className="c">{rpDoc(it.line_total)}</td>
               </tr>
             ))}
@@ -133,27 +138,27 @@ export function InvoicePaper({ inv }: { inv: InvoiceFull }) {
             {inv.tax_rate > 0 ? (
               <>
                 <tr>
-                  <td colSpan={6}>Total</td>
+                  <td colSpan={span}>Total</td>
                   <td>{rpDoc(inv.subtotal)}</td>
                 </tr>
                 <tr>
-                  <td colSpan={6}>PPN {inv.tax_rate}%</td>
+                  <td colSpan={span}>PPN {inv.tax_rate}%</td>
                   <td>{rpDoc(inv.tax_amount)}</td>
                 </tr>
                 <tr className="b">
-                  <td colSpan={6}>SUBTOTAL</td>
+                  <td colSpan={span}>SUBTOTAL</td>
                   <td>{rpDoc(inv.total)}</td>
                 </tr>
               </>
             ) : (
               <tr className="b">
-                <td colSpan={6}>TOTAL</td>
+                <td colSpan={span}>TOTAL</td>
                 <td>{rpDoc(inv.total)}</td>
               </tr>
             )}
             {payable != null && (
               <tr className="b hl">
-                <td colSpan={6}>{inv.payable_label}</td>
+                <td colSpan={span}>{inv.payable_label}</td>
                 <td>{rpDoc(payable)}</td>
               </tr>
             )}
