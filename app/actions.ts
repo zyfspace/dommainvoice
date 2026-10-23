@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getProfile } from "@/lib/auth";
+import { canSignUp, getProfile, getSessionUser } from "@/lib/auth";
 import { DEFAULT_REMARKS_KEY } from "@/lib/company";
 import { deliver } from "@/lib/n8n";
 import { repo } from "@/lib/repo";
@@ -45,6 +45,37 @@ async function guard(fn: () => Promise<void>): Promise<FormState> {
 export async function loginAction(_: FormState, fd: FormData): Promise<FormState> {
   const res = await repo.signIn(str(fd, "email"), String(fd.get("password") ?? ""));
   if (!res.ok) return { error: res.error };
+  redirect("/");
+}
+
+export async function registerAction(_: FormState, fd: FormData): Promise<FormState> {
+  const email = str(fd, "email").toLowerCase();
+  const password = String(fd.get("password") ?? "");
+  // Pesan sengaja umum: jangan bocorkan domain yang diizinkan.
+  if (!canSignUp(email)) return { error: "Email ini tidak bisa dipakai untuk mendaftar." };
+  if (password.length < 8) return { error: "Password minimal 8 karakter." };
+  if (password !== String(fd.get("confirm") ?? "")) return { error: "Konfirmasi password tidak sama." };
+  const res = await repo.signUp(email, password);
+  if (!res.ok) return { error: res.error };
+  redirect("/onboarding");
+}
+
+export async function onboardingAction(_: FormState, fd: FormData): Promise<FormState> {
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
+  if (await getProfile()) redirect("/");
+  // Cek ulang domain: jaga-jaga akun auth dibuat di luar form daftar.
+  if (!canSignUp(user.email)) return { error: "Akun ini tidak bisa melanjutkan pendaftaran." };
+  const full_name = str(fd, "full_name");
+  const role = str(fd, "role");
+  if (!full_name) return { error: "Nama wajib diisi." };
+  if (role !== "admin" && role !== "finance") return { error: "Pilih role terlebih dahulu." };
+  try {
+    await repo.createProfile({ id: user.id, email: user.email, full_name, role });
+  } catch {
+    return { error: "Gagal menyimpan, coba lagi." };
+  }
+  revalidatePath("/", "layout");
   redirect("/");
 }
 

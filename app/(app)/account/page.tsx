@@ -1,5 +1,5 @@
 import { AccountForm } from "@/components/AccountForm";
-import { requireProfile } from "@/lib/auth";
+import { requireProfile, roleLabel } from "@/lib/auth";
 
 export const metadata = { title: "Akun" };
 
@@ -31,7 +31,7 @@ export default async function AccountPage() {
         <AccountForm me={me} />
         <div className="panel">
           <h3>
-            Hak akses <span className="mut role-tag" style={{ color: "var(--navy)", borderColor: "var(--line)" }}>{me.role}</span>
+            Hak akses <span className="mut role-tag" style={{ color: "var(--navy)", borderColor: "var(--line)" }}>{roleLabel(me)}</span>
           </h3>
           <ul style={{ paddingLeft: 18, display: "grid", gap: 6 }}>
             {PERMS[me.role].map((p) => (

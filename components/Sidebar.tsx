@@ -14,7 +14,7 @@ const NAV: { href: string; label: string; icon: IconName }[] = [
   { href: "/account", label: "Akun", icon: "user" },
 ];
 
-export function Sidebar({ me, pending }: { me: Profile; pending: number }) {
+export function Sidebar({ me, roleLabel, pending }: { me: Profile; roleLabel: string; pending: number }) {
   const path = usePathname();
   const on = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
   return (
@@ -39,7 +39,7 @@ export function Sidebar({ me, pending }: { me: Profile; pending: number }) {
           <b>{me.full_name ?? me.email}</b>
           <span>{me.email}</span>
           <div style={{ marginTop: 6 }}>
-            <span className="role-tag">{me.role}</span>
+            <span className="role-tag">{roleLabel}</span>
           </div>
         </div>
         <form action={logoutAction}>

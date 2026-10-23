@@ -19,8 +19,13 @@ export interface Repo {
   mode: "local" | "supabase";
 
   signIn(email: string, password: string): Promise<{ ok: true } | { ok: false; error: string }>;
+  /** Buat akun auth baru lalu langsung login. Profil dibuat terpisah saat onboarding. */
+  signUp(email: string, password: string): Promise<{ ok: true } | { ok: false; error: string }>;
   signOut(): Promise<void>;
+  /** User yang sedang login, termasuk yang belum menyelesaikan onboarding (belum punya profil). */
+  currentUser(): Promise<{ id: string; email: string } | null>;
   currentProfile(): Promise<Profile | null>;
+  createProfile(profile: Profile): Promise<void>;
   listProfiles(): Promise<Profile[]>;
   updateProfile(id: string, patch: Partial<Pick<Profile, "full_name">>): Promise<void>;
 

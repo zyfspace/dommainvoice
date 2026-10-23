@@ -54,8 +54,24 @@ export const supabaseRepo: Repo = {
     return error ? { ok: false, error: "Email atau password salah." } : { ok: true };
   },
 
+  async signUp(email, password) {
+    // Lewat Admin API + email_confirm: tidak ada email verifikasi, domain sudah dicek di server action.
+    const { error } = await db().auth.admin.createUser({ email, password, email_confirm: true });
+    if (error) {
+      if (error.code === "email_exists") return { ok: false, error: "Email sudah terdaftar. Silakan masuk." };
+      if (error.code === "weak_password") return { ok: false, error: "Password terlalu lemah." };
+      return { ok: false, error: "Pendaftaran gagal, coba lagi." };
+    }
+    return supabaseRepo.signIn(email, password);
+  },
+
   async signOut() {
     await (await authClient()).auth.signOut();
+  },
+
+  async currentUser() {
+    const { data } = await (await authClient()).auth.getUser();
+    return data.user?.email ? { id: data.user.id, email: data.user.email } : null;
   },
 
   async currentProfile() {
@@ -67,6 +83,10 @@ export const supabaseRepo: Repo = {
 
   async listProfiles() {
     return must(await db().from("profiles").select("*").order("email")) as Profile[];
+  },
+
+  async createProfile(profile) {
+    must(await db().from("profiles").insert(profile));
   },
 
   async updateProfile(id, patch) {

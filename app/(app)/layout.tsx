@@ -1,4 +1,4 @@
-import { requireProfile } from "@/lib/auth";
+import { requireProfile, roleLabel } from "@/lib/auth";
 import { repo } from "@/lib/repo";
 import { Sidebar } from "@/components/Sidebar";
 
@@ -11,7 +11,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       : invoices.filter((i) => i.status === "revision_requested").length;
   return (
     <div className="app">
-      <Sidebar me={me} pending={pending} />
+      <Sidebar me={me} roleLabel={roleLabel(me)} pending={pending} />
       <main className="main">{children}</main>
     </div>
   );

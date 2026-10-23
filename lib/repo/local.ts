@@ -11,9 +11,14 @@ import type { Repo } from "./types";
  * Akun & role identik dengan seed Supabase (supabase/seed.sql).
  */
 
-interface LocalUser extends Profile {
+/** `role = null` → akun baru yang belum menyelesaikan onboarding. */
+interface LocalUser extends Omit<Profile, "role"> {
+  role: Role | null;
   password_hash: string;
 }
+
+type StaffUser = LocalUser & { role: Role };
+const isStaff = (u: LocalUser | undefined): u is StaffUser => Boolean(u?.role);
 
 interface Db {
   users: LocalUser[];
@@ -113,9 +118,29 @@ function tx<T>(fn: (db: Db) => T | Promise<T>): Promise<T> {
 
 const read = async <T>(fn: (db: Db) => T) => fn(await load());
 
-function toProfile(u: LocalUser): Profile {
+function toProfile(u: StaffUser): Profile {
   const { password_hash: _, ...p } = u;
   return p;
+}
+
+async function startSession(id: string) {
+  const exp = Date.now() + SESSION_DAYS * 86400000;
+  const payload = `${id}.${exp}`;
+  (await cookies()).set(COOKIE, `${payload}.${sign(payload)}`, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    expires: new Date(exp),
+  });
+}
+
+async function sessionUser() {
+  const raw = (await cookies()).get(COOKIE)?.value;
+  if (!raw) return undefined;
+  const [id, exp, sig] = raw.split(".");
+  if (!id || !exp || !sig || sign(`${id}.${exp}`) !== sig || Number(exp) < Date.now()) return undefined;
+  return read((db) => db.users.find((u) => u.id === id));
 }
 
 function withPics(db: Db, c: Omit<Customer, "pics">): Customer {
@@ -128,15 +153,19 @@ export const localRepo: Repo = {
   async signIn(email, password) {
     const user = await read((db) => db.users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase()));
     if (!user || !verify(password, user.password_hash)) return { ok: false, error: "Email atau password salah." };
-    const exp = Date.now() + SESSION_DAYS * 86400000;
-    const payload = `${user.id}.${exp}`;
-    (await cookies()).set(COOKIE, `${payload}.${sign(payload)}`, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      expires: new Date(exp),
+    await startSession(user.id);
+    return { ok: true };
+  },
+
+  async signUp(email, password) {
+    const id = await tx((db) => {
+      if (db.users.some((u) => u.email.toLowerCase() === email.toLowerCase())) return null;
+      const user: LocalUser = { id: randomUUID(), email, full_name: null, role: null, password_hash: hash(password) };
+      db.users.push(user);
+      return user.id;
     });
+    if (!id) return { ok: false, error: "Email sudah terdaftar. Silakan masuk." };
+    await startSession(id);
     return { ok: true };
   },
 
@@ -144,16 +173,24 @@ export const localRepo: Repo = {
     (await cookies()).delete(COOKIE);
   },
 
-  async currentProfile() {
-    const raw = (await cookies()).get(COOKIE)?.value;
-    if (!raw) return null;
-    const [id, exp, sig] = raw.split(".");
-    if (!id || !exp || !sig || sign(`${id}.${exp}`) !== sig || Number(exp) < Date.now()) return null;
-    const user = await read((db) => db.users.find((u) => u.id === id));
-    return user ? toProfile(user) : null;
+  async currentUser() {
+    const user = await sessionUser();
+    return user ? { id: user.id, email: user.email } : null;
   },
 
-  listProfiles: () => read((db) => db.users.map(toProfile)),
+  async currentProfile() {
+    const user = await sessionUser();
+    return isStaff(user) ? toProfile(user) : null;
+  },
+
+  createProfile: (profile) =>
+    tx((db) => {
+      const u = db.users.find((x) => x.id === profile.id);
+      if (!u) throw new Error("User tidak ditemukan.");
+      Object.assign(u, { full_name: profile.full_name, role: profile.role });
+    }),
+
+  listProfiles: () => read((db) => db.users.filter(isStaff).map(toProfile)),
 
   updateProfile: (id, patch) =>
     tx((db) => {
