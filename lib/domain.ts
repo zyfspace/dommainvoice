@@ -137,14 +137,6 @@ export function longDateEn(d: string) {
   );
 }
 
-/** Term of payment default per payment type (bisa diubah per invoice). */
-export const DEFAULT_TERM: Record<PaymentType, string> = {
-  cbd: "Pembayaran penuh sebelum barang dikirim",
-  dp: "50% DP untuk proses pengerjaan, 50% sebelum delivery",
-  termin: "",
-  top: "",
-};
-
 /** 2026-10-16 → 16 Oktober 2026 (Surat Jalan) */
 export function longDateId(d: string) {
   return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(

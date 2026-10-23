@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { saveInvoiceAction } from "@/app/actions";
 import { DEFAULT_REMARKS, ENTITIES, UOM_OPTIONS } from "@/lib/company";
-import { CUSTOMIZATION_LABEL, DEFAULT_TAX_RATE, DEFAULT_TERM, PAYMENT_TYPES, computeTotals, discounted, rupiah } from "@/lib/domain";
+import { CUSTOMIZATION_LABEL, DEFAULT_TAX_RATE, PAYMENT_TYPES, computeTotals, discounted, rupiah } from "@/lib/domain";
 import type { Customer, Customization, Entity, InvoiceFull, PaymentType } from "@/lib/types";
 import { DEFAULT_PRICELIST, quotePrice, type Pricelist } from "@/lib/pricelist";
 import { productLabel } from "@/lib/products";
@@ -101,7 +101,7 @@ export function InvoiceForm({
     payment_type: (initial?.payment_type ?? "cbd") as PaymentType,
     tax_rate: initial?.tax_rate ?? DEFAULT_TAX_RATE,
     notes: initial ? (initial.notes ?? "") : defaultRemarks,
-    term_of_payment: initial ? (initial.term_of_payment ?? "") : DEFAULT_TERM.cbd,
+    term_of_payment: initial?.term_of_payment ?? "",
     payment_info: initial?.payment_info ?? ENTITIES[initial?.entity ?? "dts"].payment,
     payable_label: initial?.payable_label ?? "",
     payable_percent: initial?.payable_percent ? String(initial.payable_percent) : "",
@@ -200,10 +200,6 @@ export function InvoiceForm({
     setMeta((m) => ({
       ...m,
       payment_type,
-      term_of_payment:
-        !m.term_of_payment.trim() || m.term_of_payment === DEFAULT_TERM[m.payment_type]
-          ? DEFAULT_TERM[payment_type]
-          : m.term_of_payment,
       ...(payment_type === "dp" || payment_type === "termin"
         ? { payable_label: "", payable_percent: m.payable_percent || "50" }
         : m.payment_type === "dp" || m.payment_type === "termin"
