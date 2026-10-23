@@ -605,8 +605,16 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .inv-wrap { border: 0; border-radius: 0; overflow: visible; padding: 0; background: none; }
   .paper-fit { height: auto !important; overflow: visible; }
   .paper-scale { transform: none !important; width: auto; box-shadow: none; }
-  .inv { width: 297mm; min-height: 0; padding: 14mm 15mm 16mm; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-  .inv-table tr, .inv-sign, .sj-sign, .inv-block { break-inside: avoid; }
+  .inv { width: 297mm; min-height: 0; padding: 11mm 15mm 10mm; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  /* Spasi vertikal dirapatkan agar invoice umum muat 1 lembar A4 landscape. */
+  .inv-info { margin-top: 16pt; }
+  .inv-table + .inv-block { margin-top: 18pt; }
+  .inv-block { margin-top: 10pt; }
+  .inv-pay { margin-top: 14pt; }
+  .inv-sign { min-height: 0; padding-top: 0; }
+  .inv-sign-name { padding-top: 40pt; }
+  /* Kalau tetap 2 lembar, blok pembayaran + tanda tangan pindah utuh, tidak terpotong. */
+  .inv-table tr, .inv-sign, .sj-sign, .inv-block, .inv-pay { break-inside: avoid; page-break-inside: avoid; }
   .inv-table thead { display: table-header-group; }
   /* Total hanya di akhir tabel, tidak diulang tiap halaman. */
   .inv-table tfoot { display: table-row-group; }
