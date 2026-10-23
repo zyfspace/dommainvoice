@@ -357,6 +357,10 @@ details.act[open] summary { margin-bottom: 10px; }
 .login-form form { width: min(360px, 100%); }
 .login-form h1 { font-size: 20px; margin-bottom: 4px; }
 .login-form .sub { color: var(--mut); font-size: 12px; margin-bottom: 24px; line-height: 1.4; }
+.pw { position: relative; }
+.pw input { padding-right: 42px; }
+.pw .ib { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; }
+.pw .ib:hover { background: none; color: var(--ink); }
 
 /* ── Dashboard: full tinggi layar, list scroll di dalam ─ */
 .dash { display: flex; flex-direction: column; gap: 12px; height: calc(100dvh - 54px); min-height: 600px; margin-bottom: -36px; }
