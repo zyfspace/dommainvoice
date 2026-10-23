@@ -7,3 +7,5 @@ next-env.d.ts
 *.tsbuildinfo
 
 Domma - Invoice Management Dashboard/
+
+threads-carousel/
