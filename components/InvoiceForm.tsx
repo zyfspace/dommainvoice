@@ -26,7 +26,12 @@ type Row = {
   notes: string;
   /** true = unit price mengikuti pricelist (berhenti saat diisi manual). */
   auto: boolean;
+  /** Baris biaya pengiriman: tanpa SKU, customization, diskon & pricelist. */
+  ship?: boolean;
 };
+
+const SHIP_PRODUCT = "Biaya Pengiriman";
+const blankShip = (): Row => ({ ...blank(), product: SHIP_PRODUCT, uom: "Rit", auto: false, ship: true });
 
 const NEW_PIC = "__new";
 
@@ -129,6 +134,7 @@ export function InvoiceForm({
           customization: i.customization,
           notes: i.notes ?? "",
           auto: false,
+          ship: i.product === SHIP_PRODUCT && !i.sku,
         }))
       : [blank()],
   );
@@ -609,7 +615,7 @@ export function InvoiceForm({
             {rows.map((r, idx) => (
               <div className="item" key={r.key}>
                 <div className="item-h">
-                  <b>Item {idx + 1}</b>
+                  <b>{r.ship ? "Biaya pengiriman" : `Item ${rows.slice(0, idx + 1).filter((x) => !x.ship).length}`}</b>
                   <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span className="num">
                       {rupiah(totals.lines[idx] ?? 0)}
@@ -626,6 +632,56 @@ export function InvoiceForm({
                     )}
                   </span>
                 </div>
+                {r.ship ? (
+                  <div className="item-ship">
+                    <div className="f">
+                      <label>Keterangan (opsional)</label>
+                      <input
+                        value={r.notes}
+                        onChange={(e) => setRow(r.key, { notes: e.target.value })}
+                        placeholder="Kurir, kota tujuan, dll."
+                      />
+                    </div>
+                    <div className="f">
+                      <label>
+                        Qty <i>*</i>
+                      </label>
+                      <input
+                        type="number"
+                        {...noSpin}
+                        min="1"
+                        step="1"
+                        inputMode="numeric"
+                        value={r.quantity}
+                        onChange={(e) => setRow(r.key, { quantity: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="f">
+                      <label>
+                        Satuan <i>*</i>
+                      </label>
+                      <input list="uom-list" value={r.uom} onChange={(e) => setRow(r.key, { uom: e.target.value })} required />
+                    </div>
+                    <div className="f">
+                      <label>
+                        Biaya (Rp) <i>*</i>
+                      </label>
+                      <input
+                        type="number"
+                        {...noSpin}
+                        min="0"
+                        step="1"
+                        inputMode="numeric"
+                        value={r.unit_price}
+                        onChange={(e) => setRow(r.key, { unit_price: e.target.value })}
+                        placeholder="0"
+                        required
+                      />
+                    </div>
+                  </div>
+                ) : (
+                <>
                 <div className="item-row1">
                   <div className="f">
                     <label>SKU</label>
@@ -724,6 +780,8 @@ export function InvoiceForm({
                   </div>
                 </div>
                 <PriceHint row={r} list={pricelist} onApply={(unit_price) => setRow(r.key, { unit_price, auto: true })} />
+                </>
+                )}
               </div>
             ))}
           </div>
@@ -739,7 +797,7 @@ export function InvoiceForm({
             <button
               type="button"
               className="btn sm"
-              onClick={() => setRows((rs) => [...rs, { ...blank(), product: "Biaya Pengiriman", uom: "Rit" }])}
+              onClick={() => setRows((rs) => [...rs, blankShip()])}
             >
               <Icon n="plus" /> Biaya pengiriman
             </button>
