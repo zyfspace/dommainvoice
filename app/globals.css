@@ -357,6 +357,28 @@ details.act[open] summary { margin-bottom: 10px; }
 .login-form form { width: min(360px, 100%); }
 .login-form h1 { font-size: 20px; margin-bottom: 4px; }
 .login-form .sub { color: var(--mut); font-size: 12px; margin-bottom: 24px; line-height: 1.4; }
+.login-form .alt { margin-top: 18px; font-size: 12px; color: var(--mut); text-align: center; }
+.login-form .alt a, .login-form .alt button { color: var(--navy); font-weight: 500; }
+.login-form .alt a:hover, .login-form .alt button:hover { text-decoration: underline; }
+.onb { width: min(360px, 100%); }
+.onb .step { font-size: 12px; color: var(--mut); margin-bottom: 8px; }
+.onb .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 24px; }
+.onb .steps i { height: 3px; border-radius: 2px; background: var(--line); transition: background 0.2s; }
+.onb .steps i.on { background: var(--navy); }
+.opts { display: grid; gap: 8px; margin-bottom: 16px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line); border-radius: 8px; padding: 12px; cursor: pointer; transition: 0.15s; }
+.opt:hover { border-color: var(--navy); }
+.opt.on { border-color: var(--navy); box-shadow: 0 0 0 3px var(--tint); }
+.opt input { margin-top: 2px; accent-color: var(--navy); }
+.opt b { display: block; font-size: 13px; margin-bottom: 2px; }
+.opt span { color: var(--mut); font-size: 12px; line-height: 1.4; }
+.sum { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 16px; }
+.sum div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; font-size: 13px; }
+.sum div + div { border-top: 1px solid var(--line); }
+.sum dt { color: var(--mut); }
+.sum dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.row2 { display: flex; gap: 8px; }
+.row2 .btn:not(.block) { flex: none; }
 .pw { position: relative; }
 .pw input { padding-right: 42px; }
 .pw .ib { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; }

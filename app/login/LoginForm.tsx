@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Icon } from "@/components/Icon";
 import { loginAction } from "../actions";
@@ -10,7 +11,7 @@ export function LoginForm() {
   return (
     <form action={action}>
       <h1>Masuk</h1>
-      <p className="sub">Gunakan akun internal yang diberikan administrator.</p>
+      <p className="sub">Masuk dengan akun Domma kamu.</p>
       {state?.error && <div className="err">{state.error}</div>}
       <div className="f">
         <label htmlFor="email">Email</label>
@@ -34,6 +35,9 @@ export function LoginForm() {
       <button className="btn pri block" disabled={pending} style={{ height: 40, marginTop: 6 }}>
         {pending ? "Memproses…" : "Masuk"}
       </button>
+      <p className="alt">
+        Belum punya akun? <Link href="/register">Daftar</Link>
+      </p>
     </form>
   );
 }
