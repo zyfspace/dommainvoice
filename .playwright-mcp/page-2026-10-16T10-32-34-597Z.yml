@@ -1,0 +1,161 @@
+- generic [active] [ref=f17e1]:
+  - generic [ref=f17e2]:
+    - complementary [ref=f17e3]:
+      - link "Domma Invoice Management" [ref=f17e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f17e5]:
+          - img "Domma" [ref=f17e6]
+          - generic [ref=f17e7]: Invoice Management
+      - link "Overview" [ref=f17e8] [cursor=pointer]:
+        - /url: /
+      - link "Invoices 1" [ref=f17e14] [cursor=pointer]:
+        - /url: /invoices
+        - generic [ref=f17e18]: Invoices
+        - emphasis [ref=f17e19]: "1"
+      - link "Customers" [ref=f17e20] [cursor=pointer]:
+        - /url: /customers
+      - link "Akun" [ref=f17e27] [cursor=pointer]:
+        - /url: /account
+      - generic [ref=f17e32]:
+        - generic [ref=f17e33]:
+          - generic [ref=f17e34]: Admin Domma
+          - text: admin@withdomma.com
+          - generic [ref=f17e35]: admin
+        - button "Keluar" [ref=f17e38] [cursor=pointer]
+    - main [ref=f17e44]:
+      - link "Invoices" [ref=f17e45] [cursor=pointer]:
+        - /url: /invoices
+      - generic [ref=f17e49]:
+        - generic [ref=f17e50]:
+          - heading "10/2026-INV/DOM/DP/001" [level=1] [ref=f17e51]
+          - generic [ref=f17e52]: PT Sinar Laser Nusantara · dibuat 15 Okt 2026, 23.15 oleh admin@withdomma.com
+        - generic [ref=f17e53]: Approved
+      - generic [ref=f17e58]:
+        - generic [ref=f17e59]: Menunggu penerbitan PDF
+        - text: n8n akan membuat PDF, mengirim email, dan sinkron ke Google Sheets.
+      - generic [ref=f17e60]:
+        - generic [ref=f17e61]:
+          - generic [ref=f17e62]:
+            - heading "Aksi" [level=3] [ref=f17e63]
+            - generic [ref=f17e64]:
+              - paragraph [ref=f17e65]: Tidak ada aksi untuk status ini.
+              - link "Cetak" [ref=f17e67] [cursor=pointer]:
+                - /url: /invoices/4f97befd-d549-447b-bb0f-c61324190ef5/print
+          - generic [ref=f17e72]:
+            - heading "Detail" [level=3] [ref=f17e73]
+            - generic [ref=f17e74]:
+              - generic [ref=f17e75]: Status
+              - generic [ref=f17e76]: Approved
+            - generic [ref=f17e77]:
+              - generic [ref=f17e78]: Dibuat oleh
+              - generic [ref=f17e79]: admin@withdomma.com
+            - generic [ref=f17e80]:
+              - generic [ref=f17e81]: Disetujui
+              - generic [ref=f17e82]: 15 Okt 2026, 23.17
+            - generic [ref=f17e83]:
+              - generic [ref=f17e84]: Diterbitkan
+              - generic [ref=f17e85]: —
+            - generic [ref=f17e86]:
+              - generic [ref=f17e87]: Email terkirim
+              - generic [ref=f17e88]: —
+            - generic [ref=f17e89]:
+              - generic [ref=f17e90]: Google Sheets
+              - generic [ref=f17e91]: —
+            - generic [ref=f17e92]:
+              - generic [ref=f17e93]: Customer
+              - link "Lihat data" [ref=f17e94] [cursor=pointer]:
+                - /url: /customers/fa5f8470-82a7-4279-9846-e78d1dac1374
+          - generic [ref=f17e95]:
+            - heading "Riwayat status 3" [level=3] [ref=f17e96]:
+              - text: Riwayat status
+              - generic [ref=f17e97]: "3"
+            - list [ref=f17e98]:
+              - listitem [ref=f17e99]:
+                - text: Invoice dibuat
+                - generic [ref=f17e100]: admin@withdomma.com · 15 Okt 2026, 23.15
+              - listitem [ref=f17e101]:
+                - text: Diajukan ke Finance
+                - generic [ref=f17e102]: admin@withdomma.com · 15 Okt 2026, 23.17
+              - listitem [ref=f17e103]:
+                - text: Disetujui Finance
+                - generic [ref=f17e104]: finance@withdomma.com · 15 Okt 2026, 23.17
+                - paragraph [ref=f17e105]: Nomor 10/2026-INV/DOM/DP/001
+        - article [ref=f17e109]:
+          - generic [ref=f17e110]:
+            - generic [ref=f17e111]:
+              - img "PT Teman Melangkah Bersama" [ref=f17e112]
+              - generic [ref=f17e113]:
+                - generic [ref=f17e114]: PT Teman Melangkah Bersama
+                - generic [ref=f17e115]: Jl. Dr. Muwardi I No. 33, Grogol, Grogol Petamburan
+                - generic [ref=f17e116]: Kota Adm. Jakarta Barat, 11450
+                - generic [ref=f17e117]: "Email: hi@withdomma.com"
+            - heading "INVOICE" [level=2] [ref=f17e119]
+          - generic [ref=f17e120]:
+            - generic [ref=f17e121]:
+              - generic [ref=f17e122]: "Customer Information:"
+              - generic [ref=f17e123]: PT Sinar Laser Nusantara
+              - generic [ref=f17e124]: Attn. Rina Kartika
+              - generic [ref=f17e125]: Jl. Gatot Subroto Kav. 12, Jakarta Selatan 12930
+            - generic [ref=f17e126]:
+              - generic [ref=f17e127]: No.
+              - generic [ref=f17e128]: ":"
+              - generic [ref=f17e129]: 10/2026-INV/DOM/DP/001
+              - generic [ref=f17e130]: Tanggal/Date
+              - generic [ref=f17e131]: ":"
+              - generic [ref=f17e132]: 15/10/2026
+              - generic [ref=f17e133]: Tanggal Jatuh Tempo/Due Date
+              - generic [ref=f17e134]: ":"
+              - generic [ref=f17e135]: 29/10/2026
+          - table [ref=f17e136]:
+            - rowgroup [ref=f17e145]:
+              - row [ref=f17e146]:
+                - columnheader "No." [ref=f17e147]
+                - columnheader "SKU" [ref=f17e148]
+                - columnheader "Product" [ref=f17e149]
+                - columnheader "Qty" [ref=f17e150]
+                - columnheader "UoM" [ref=f17e151]
+                - columnheader "Price" [ref=f17e152]
+                - columnheader "Total Price" [ref=f17e153]
+            - rowgroup [ref=f17e154]:
+              - row [ref=f17e155]:
+                - cell "1" [ref=f17e156]
+                - cell "CL-500-BL" [ref=f17e157]
+                - cell "500 ml Classic Botol Minum" [ref=f17e158]
+                - cell "50" [ref=f17e159]
+                - cell "Pcs" [ref=f17e160]
+                - cell "Rp148,000" [ref=f17e161]
+                - cell "Rp7,400,000" [ref=f17e162]
+              - row [ref=f17e163]:
+                - cell "2" [ref=f17e164]
+                - cell [ref=f17e165]
+                - cell "Biaya Pengiriman" [ref=f17e166]
+                - cell "1" [ref=f17e167]
+                - cell "Rit" [ref=f17e168]
+                - cell "Rp120,000" [ref=f17e169]
+                - cell "Rp120,000" [ref=f17e170]
+            - rowgroup [ref=f17e171]:
+              - row [ref=f17e172]:
+                - cell "TOTAL" [ref=f17e173]
+                - cell "Rp7,520,000" [ref=f17e174]
+              - row [ref=f17e175]:
+                - cell "DP 50%" [ref=f17e176]
+                - cell "Rp3,760,000" [ref=f17e177]
+          - generic [ref=f17e178]:
+            - generic [ref=f17e179]: "Remarks:"
+            - generic [ref=f17e180]: Biaya pengiriman merupakan biaya jasa pihak ketiga dan tidak termasuk objek pemotongan pajak.
+            - generic [ref=f17e181]: Mohon mencantumkan nomor invoice sebagai referensi pada saat melakukan pembayaran.
+            - generic [ref=f17e182]: Pembayaran jatuh tempo 14 hari setelah invoice terbit
+            - generic [ref=f17e183]:
+              - text: Complain
+              - generic [ref=f17e184]: MAX 7 HARI KERJA
+              - text: setelah barang diterima
+          - generic [ref=f17e185]:
+            - generic [ref=f17e186]: "Term of payment:"
+            - generic [ref=f17e187]: 50% DP untuk proses pengerjaan, 50% sebelum delivery
+          - generic [ref=f17e189]:
+            - generic [ref=f17e190]: "Pembayaran:"
+            - generic [ref=f17e191]:
+              - generic [ref=f17e192]: BCA
+              - text: "8740550285"
+            - generic [ref=f17e193]: PT TEMAN MELANGKAH BERSAMA
+  - button "Open Next.js Dev Tools" [ref=f17e199] [cursor=pointer]

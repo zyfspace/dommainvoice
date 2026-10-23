@@ -1,0 +1,105 @@
+- generic [active] [ref=f16e1]:
+  - generic [ref=f16e2]:
+    - complementary [ref=f16e3]:
+      - link "Domma Invoice Management" [ref=f16e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f16e5]:
+          - img "Domma" [ref=f16e6]
+          - generic [ref=f16e7]: Invoice Management
+      - link "Overview" [ref=f16e8] [cursor=pointer]:
+        - /url: /
+      - link "Invoices 1" [ref=f16e14] [cursor=pointer]:
+        - /url: /invoices
+        - generic [ref=f16e18]: Invoices
+        - emphasis [ref=f16e19]: "1"
+      - link "Customers" [ref=f16e20] [cursor=pointer]:
+        - /url: /customers
+      - link "Akun" [ref=f16e27] [cursor=pointer]:
+        - /url: /account
+      - generic [ref=f16e32]:
+        - generic [ref=f16e33]:
+          - generic [ref=f16e34]: Admin Domma
+          - text: admin@withdomma.com
+          - generic [ref=f16e35]: admin
+        - button "Keluar" [ref=f16e38] [cursor=pointer]
+    - main [ref=f16e44]:
+      - generic [ref=f16e45]:
+        - generic [ref=f16e46]:
+          - heading "Invoices" [level=1] [ref=f16e47]
+          - generic [ref=f16e48]: Histori seluruh invoice beserta status approval.
+        - textbox "Cari nomor, customer, PIC…" [ref=f16e53]
+        - link "Invoice baru" [ref=f16e54] [cursor=pointer]:
+          - /url: /invoices/new
+      - generic [ref=f16e56]:
+        - link "Semua 2" [ref=f16e57] [cursor=pointer]:
+          - /url: /invoices
+          - text: Semua
+          - generic [ref=f16e58]: "2"
+        - link "Draft 0" [ref=f16e59] [cursor=pointer]:
+          - /url: /invoices?status=draft
+          - text: Draft
+          - generic [ref=f16e60]: "0"
+        - link "On Check 0" [ref=f16e61] [cursor=pointer]:
+          - /url: /invoices?status=on_check
+          - text: On Check
+          - generic [ref=f16e62]: "0"
+        - link "Revision Requested 1" [ref=f16e63] [cursor=pointer]:
+          - /url: /invoices?status=revision_requested
+          - text: Revision Requested
+          - generic [ref=f16e64]: "1"
+        - link "Approved 1" [ref=f16e65] [cursor=pointer]:
+          - /url: /invoices?status=approved
+          - text: Approved
+          - generic [ref=f16e66]: "1"
+        - link "Issued 0" [ref=f16e67] [cursor=pointer]:
+          - /url: /invoices?status=issued
+          - text: Issued
+          - generic [ref=f16e68]: "0"
+        - link "Rejected 0" [ref=f16e69] [cursor=pointer]:
+          - /url: /invoices?status=rejected
+          - text: Rejected
+          - generic [ref=f16e70]: "0"
+        - link "Cancelled 0" [ref=f16e71] [cursor=pointer]:
+          - /url: /invoices?status=cancelled
+          - text: Cancelled
+          - generic [ref=f16e72]: "0"
+      - table [ref=f16e74]:
+        - rowgroup [ref=f16e75]:
+          - row [ref=f16e76]:
+            - columnheader "No. Invoice" [ref=f16e77]
+            - columnheader "Customer" [ref=f16e78]
+            - columnheader "Tanggal" [ref=f16e79]
+            - columnheader "Due date" [ref=f16e80]
+            - columnheader "Penerbit" [ref=f16e81]
+            - columnheader "Total" [ref=f16e82]
+            - columnheader "Status" [ref=f16e83]
+        - rowgroup [ref=f16e84]:
+          - row [ref=f16e85]:
+            - cell [ref=f16e86]:
+              - link "10/2026-INV/DOM/DP/001" [ref=f16e87] [cursor=pointer]:
+                - /url: /invoices/4f97befd-d549-447b-bb0f-c61324190ef5
+            - cell [ref=f16e88]:
+              - link "PT Sinar Laser Nusantara Rina Kartika" [ref=f16e89] [cursor=pointer]:
+                - /url: /invoices/4f97befd-d549-447b-bb0f-c61324190ef5
+                - text: PT Sinar Laser Nusantara
+                - generic [ref=f16e90]: Rina Kartika
+            - cell "15 Okt 2026" [ref=f16e91]
+            - cell "29 Okt 2026" [ref=f16e92]
+            - cell "TMB" [ref=f16e93]
+            - cell "Rp7.520.000" [ref=f16e94]
+            - cell "Approved" [ref=f16e95]
+          - row [ref=f16e97]:
+            - cell [ref=f16e98]:
+              - link "Belum bernomor" [ref=f16e99] [cursor=pointer]:
+                - /url: /invoices/29bb6b6d-8484-4573-bff2-f85a1cec90b8
+            - cell [ref=f16e100]:
+              - link "PT Sinar Laser Nusantara Rina Kartika" [ref=f16e101] [cursor=pointer]:
+                - /url: /invoices/29bb6b6d-8484-4573-bff2-f85a1cec90b8
+                - text: PT Sinar Laser Nusantara
+                - generic [ref=f16e102]: Rina Kartika
+            - cell "15 Okt 2026" [ref=f16e103]
+            - cell "29 Okt 2026" [ref=f16e104]
+            - cell "DTS" [ref=f16e105]
+            - cell "Rp23.115.750" [ref=f16e106]
+            - cell "Revision Requested" [ref=f16e107]
+  - button "Open Next.js Dev Tools" [ref=f16e114] [cursor=pointer]
