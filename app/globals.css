@@ -663,6 +663,13 @@ input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
   body:has(.sj) .app { display: block; }
   body:has(.sj) .main { padding: 0; margin: 0; max-width: none; }
   body:has(.sj) .dgrid { display: block; }
+  /* Spasi dirapatkan agar muat 1 lembar; tanda tangan tetap cukup ruang. */
+  .sj-logo { margin-bottom: 8pt; }
+  .sj-info { margin-top: 16pt; }
+  .sj-table { margin-top: 14pt; }
+  .sj-sign { margin-top: 12pt; }
+  .sj-sign-line { margin-top: 44pt; }
+  .sj-sign-name { margin-top: 34pt; }
 }
 
 /* ── Pembayaran ────────────────────────────────────────── */
