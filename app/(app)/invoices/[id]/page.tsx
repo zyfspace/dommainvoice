@@ -8,7 +8,7 @@ import { PaymentsPanel } from "@/components/PaymentsPanel";
 import { StatusPair } from "@/components/Status";
 import { requireProfile } from "@/lib/auth";
 import { STATUS_LABEL, fmtDateTime } from "@/lib/domain";
-import { repo } from "@/lib/repo";
+import { getInvoiceCached, repo } from "@/lib/repo";
 
 const ACTION_LABEL: Record<string, string> = {
   created: "Invoice dibuat",
@@ -30,14 +30,14 @@ const ACTION_LABEL: Record<string, string> = {
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const inv = await repo.getInvoice((await params).id);
+  const inv = await getInvoiceCached((await params).id);
   return { title: inv?.invoice_number ?? inv?.company_name ?? "Invoice" };
 }
 
 export default async function InvoiceDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const me = await requireProfile();
-  const inv = await repo.getInvoice(id);
+  const inv = await getInvoiceCached(id);
   if (!inv) notFound();
   const group = inv.group_id ? await repo.listGroup(inv.group_id) : [inv];
   const lastNote = [...inv.events].reverse().find((e) => e.to_status === inv.status)?.notes;

@@ -35,6 +35,7 @@ export interface Repo {
   updateCustomer(id: string, input: CustomerInput, pics: PicInput[]): Promise<void>;
 
   listInvoices(): Promise<Invoice[]>;
+  countInvoices(status: InvoiceStatus): Promise<number>;
   /** Semua invoice dalam satu grup DP, urut DP → Pelunasan. */
   listGroup(groupId: string): Promise<Invoice[]>;
   getInvoice(id: string): Promise<InvoiceFull | null>;

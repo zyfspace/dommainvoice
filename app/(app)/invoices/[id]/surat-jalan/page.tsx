@@ -6,18 +6,18 @@ import { SuratJalanForm } from "@/components/SuratJalanForm";
 import { requireProfile } from "@/lib/auth";
 import { SURAT_JALAN_ROLES, suratJalanReady, todayJakarta } from "@/lib/domain";
 import { PRODUCTS } from "@/lib/products";
-import { repo } from "@/lib/repo";
+import { getInvoiceCached, repo } from "@/lib/repo";
 import { getPreparers } from "@/lib/service";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const inv = await repo.getInvoice((await params).id);
+  const inv = await getInvoiceCached((await params).id);
   return { title: inv ? `Surat Jalan - ${inv.company_name}` : "Surat Jalan" };
 }
 
 export default async function SuratJalanPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const me = await requireProfile();
-  const inv = await repo.getInvoice(id);
+  const inv = await getInvoiceCached(id);
   if (!inv) notFound();
   // Surat Jalan hanya untuk invoice yang sudah dibayar (grup DP: Pelunasan, setelah semua Paid).
   const group = inv.group_id ? await repo.listGroup(inv.group_id) : [inv];

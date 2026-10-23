@@ -129,6 +129,12 @@ export const supabaseRepo: Repo = {
     return must(await db().from("invoices").select("*").order("created_at", { ascending: false })) as Invoice[];
   },
 
+  async countInvoices(status) {
+    const { count, error } = await db().from("invoices").select("id", { count: "exact", head: true }).eq("status", status);
+    if (error) throw new Error(error.message);
+    return count ?? 0;
+  },
+
   async listGroup(groupId) {
     return must(await db().from("invoices").select("*").eq("group_id", groupId).order("installment")) as Invoice[];
   },

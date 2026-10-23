@@ -4,11 +4,7 @@ import { Sidebar } from "@/components/Sidebar";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const me = await requireProfile();
-  const invoices = await repo.listInvoices();
-  const pending =
-    me.role === "finance"
-      ? invoices.filter((i) => i.status === "on_check").length
-      : invoices.filter((i) => i.status === "revision_requested").length;
+  const pending = await repo.countInvoices(me.role === "finance" ? "on_check" : "revision_requested");
   return (
     <div className="app">
       <Sidebar me={me} roleLabel={roleLabel(me)} pending={pending} />

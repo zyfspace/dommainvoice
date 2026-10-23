@@ -233,6 +233,7 @@ export const localRepo: Repo = {
       }
     }),
 
+  countInvoices: (status) => read((db) => db.invoices.filter((i) => i.status === status).length),
   listInvoices: () => read((db) => [...db.invoices].sort((a, b) => b.created_at.localeCompare(a.created_at))),
 
   listGroup: (groupId) =>

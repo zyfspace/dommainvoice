@@ -372,14 +372,15 @@ export async function submitInvoice(actor: Profile | null, id: string, afterRevi
   }
   const resubmit = afterRevision || before.status === "revision_requested";
   // Nomor terbit saat diajukan (dipakai ulang setelah revisi) supaya admin & Finance merujuk nomor yang sama.
-  for (const inv of await assignNumbers(claimed)) {
+  const [numbered, notify] = await Promise.all([assignNumbers(claimed), financeEmails()]);
+  for (const inv of numbered) {
     await log(inv, actor, resubmit ? "resubmitted" : "submitted", before.status, "on_check");
     await emit("invoice.submitted", inv, {
       requested_by: actor.email,
       total: inv.total,
       company_name: inv.company_name,
       resubmitted: resubmit,
-      notify_emails: await financeEmails(),
+      notify_emails: notify,
     });
   }
 }
