@@ -1,10 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { Icon } from "@/components/Icon";
 import { loginAction } from "../actions";
 
 export function LoginForm() {
   const [state, action, pending] = useActionState(loginAction, undefined);
+  const [show, setShow] = useState(false);
   return (
     <form action={action}>
       <h1>Masuk</h1>
@@ -16,7 +18,18 @@ export function LoginForm() {
       </div>
       <div className="f">
         <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" autoComplete="current-password" required />
+        <div className="pw">
+          <input id="password" name="password" type={show ? "text" : "password"} autoComplete="current-password" required />
+          <button
+            type="button"
+            className="ib"
+            onClick={() => setShow((v) => !v)}
+            aria-label={show ? "Sembunyikan password" : "Tampilkan password"}
+            aria-pressed={show}
+          >
+            <Icon n={show ? "eyeOff" : "eye"} />
+          </button>
+        </div>
       </div>
       <button className="btn pri block" disabled={pending} style={{ height: 40, marginTop: 6 }}>
         {pending ? "Memproses…" : "Masuk"}
