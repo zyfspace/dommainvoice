@@ -272,6 +272,12 @@ table.t.pl { table-layout: fixed; }
 .sum .row.total b { font-family: var(--font-head); font-size: 17px; letter-spacing: -0.02em; }
 .hint { display: block; font-size: 12px; line-height: 1.45; color: var(--mut); margin-top: 6px; }
 .actions { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+/* Download & Cetak invoice: dua tombol sama lebar, ikon + teks pendek. */
+.doc-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; }
+.doc-btns .btn { justify-content: center; min-width: 0; white-space: nowrap; }
+.doc-btns .err { grid-column: 1 / -1; }
+/* Layar sentuh (HP & tablet): tombol lebih tinggi agar mudah ditekan. */
+@media (pointer: coarse) { .doc-btns .btn.sm { height: 40px; font-size: 13px; } }
 
 /* ── Detail ────────────────────────────────────────────── */
 .dgrid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
@@ -313,7 +319,7 @@ details.act[open] summary { margin-bottom: 10px; }
 .paper-scale { width: 297mm; margin: 0 auto; transform-origin: top left; box-shadow: 0 1px 4px color-mix(in srgb, var(--ink) 14%, transparent); }
 .inv {
   --inv-line: var(--ink);
-  width: 297mm; min-height: 210mm; padding: 16mm 15mm 18mm;
+  width: 297mm; min-height: 210mm; padding: 11mm 15mm 10mm;
   font-family: var(--font-num); font-size: 8.5pt; line-height: 1.45; color: var(--ink); background: var(--paper);
 }
 .inv b { font-weight: 700; }
@@ -324,7 +330,7 @@ details.act[open] summary { margin-bottom: 10px; }
 .inv-title { text-align: right; padding-top: 4pt; }
 .inv-title h2 { font-family: var(--font-head); font-weight: 800; font-size: 24pt; letter-spacing: 0.02em; line-height: 1; color: var(--ink); }
 .inv-stamp { display: inline-block; margin-top: 8pt; border: 1px solid var(--navy); color: var(--navy); border-radius: 3pt; padding: 1pt 6pt; font-size: 7pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.inv-info { display: grid; grid-template-columns: 1fr 1fr; gap: 24pt; margin-top: 24pt; }
+.inv-info { display: grid; grid-template-columns: 1fr 1fr; gap: 24pt; margin-top: 16pt; }
 .inv-cust b { display: block; }
 .inv-meta { display: grid; grid-template-columns: max-content 8pt minmax(0, 1fr); column-gap: 6pt; row-gap: 3pt; align-content: start; align-items: baseline; }
 .inv-meta b { white-space: nowrap; }
@@ -340,14 +346,14 @@ details.act[open] summary { margin-bottom: 10px; }
 .inv-table tfoot td:last-child { text-align: center; }
 .inv-table tfoot tr.b td { font-weight: 700; }
 .inv-table tfoot tr.hl td { background: var(--navy); color: var(--paper); border-color: var(--navy); }
-.inv-block { margin-top: 16pt; }
-.inv-table + .inv-block { margin-top: 30pt; }
+.inv-block { margin-top: 10pt; }
+.inv-table + .inv-block { margin-top: 18pt; }
 .inv-block b:first-child { display: block; }
-.inv-pay { display: flex; justify-content: space-between; gap: 24pt; }
+.inv-pay { display: flex; justify-content: space-between; gap: 24pt; margin-top: 14pt; }
 .inv-pay a { color: var(--navy); text-decoration: underline; }
 .inv-pay .tab { display: inline-block; min-width: 28pt; }
-.inv-sign { text-align: right; display: flex; flex-direction: column; justify-content: space-between; min-height: 90pt; padding-top: 12pt; }
-.inv-sign-name { padding-top: 48pt; }
+.inv-sign { text-align: right; display: flex; flex-direction: column; justify-content: space-between; }
+.inv-sign-name { padding-top: 40pt; }
 
 /* ── Customers ─────────────────────────────────────────── */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
@@ -605,8 +611,9 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .inv-wrap { border: 0; border-radius: 0; overflow: visible; padding: 0; background: none; }
   .paper-fit { height: auto !important; overflow: visible; }
   .paper-scale { transform: none !important; width: auto; box-shadow: none; }
-  .inv { width: 297mm; min-height: 0; padding: 14mm 15mm 16mm; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-  .inv-table tr, .inv-sign, .sj-sign, .inv-block { break-inside: avoid; }
+  .inv { width: 297mm; min-height: 0; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  /* Kalau tetap 2 lembar, blok pembayaran + tanda tangan pindah utuh, tidak terpotong. */
+  .inv-table tr, .inv-sign, .sj-sign, .inv-block, .inv-pay { break-inside: avoid; page-break-inside: avoid; }
   .inv-table thead { display: table-header-group; }
   /* Total hanya di akhir tabel, tidak diulang tiap halaman. */
   .inv-table tfoot { display: table-row-group; }
@@ -633,28 +640,31 @@ input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
 
 /* ── Surat Jalan (A4 landscape, sama seperti invoice) ─── */
 .inv.sj { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; }
-.sj-logo { display: block; height: 22pt; width: auto; margin-bottom: 14pt; }
+.sj-logo { display: block; height: 22pt; width: auto; margin-bottom: 8pt; }
 .sj-from { font-size: 6.5pt; line-height: 1.5; }
 .sj-title { font-family: var(--font-head); font-weight: 700; font-size: 18pt; padding-top: 2pt; }
-.sj-info { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24pt; margin-top: 24pt; }
+.sj-info { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24pt; margin-top: 16pt; }
 .sj-info .inv-cust div { text-transform: uppercase; }
 .sj-info .inv-cust div:last-child { text-transform: none; }
-.sj-table { margin-top: 20pt; }
+.sj-table { margin-top: 14pt; }
 .sj-table td.sj-nob { border: 0; padding-top: 4pt; }
-.sj-sign { display: flex; justify-content: space-between; margin-top: 20pt; padding: 0 20pt; }
+.sj-sign { display: flex; justify-content: space-between; margin-top: 12pt; padding: 0 20pt; }
 .sj-sign > div { display: flex; flex-direction: column; align-items: center; min-width: 120pt; }
-.sj-sign-line { margin-top: 54pt; }
-.sj-sign-name { margin-top: 44pt; }
+.sj-sign-line { margin-top: 44pt; }
+.sj-sign-name { margin-top: 34pt; }
 .sj-row + .sj-row { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 4px; }
 .sj-row .f { margin-bottom: 8px; }
 .sj-row .hint { margin: 0 0 6px; }
 .chip-x { border: 0; background: none; padding: 0; color: inherit; display: inline-flex; cursor: pointer; }
 .chip-x:hover { color: #b42318; }
 @media print {
-  body:has(.sj) .side { display: none; }
-  body:has(.sj) .app { display: block; }
-  body:has(.sj) .main { padding: 0; margin: 0; max-width: none; }
-  body:has(.sj) .dgrid { display: block; }
+  /* Cetak langsung dari halaman detail/Surat Jalan: hanya kertas dokumen yang ikut tercetak. */
+  body:has(.dgrid > .inv-wrap) .side,
+  .main:has(.dgrid > .inv-wrap) > :not(.dgrid),
+  .dgrid:has(> .inv-wrap) > :not(.inv-wrap) { display: none !important; }
+  body:has(.dgrid > .inv-wrap) .app { display: block; }
+  body:has(.dgrid > .inv-wrap) .main { padding: 0; margin: 0; max-width: none; }
+  .dgrid:has(> .inv-wrap) { display: block; }
 }
 
 /* ── Pembayaran ────────────────────────────────────────── */

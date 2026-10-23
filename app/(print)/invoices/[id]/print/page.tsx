@@ -7,10 +7,10 @@ import { invoiceFileName } from "@/lib/company";
 import { PRINTABLE, STATUS_LABEL } from "@/lib/domain";
 import { requireProfile } from "@/lib/auth";
 import { verifyPrintToken } from "@/lib/n8n";
-import { repo } from "@/lib/repo";
+import { getInvoiceCached } from "@/lib/repo";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const inv = await repo.getInvoice((await params).id);
+  const inv = await getInvoiceCached((await params).id);
   return { title: inv ? invoiceFileName(inv) : "Invoice" };
 }
 
@@ -26,7 +26,7 @@ export default async function PrintPage({
   // n8n merender halaman ini jadi PDF memakai token sementara dari GET /api/n8n/invoices/{id}.
   const viaN8n = verifyPrintToken(id, token);
   if (!viaN8n) await requireProfile();
-  const inv = await repo.getInvoice(id);
+  const inv = await getInvoiceCached(id);
   if (!inv) notFound();
   if (!viaN8n && !PRINTABLE.includes(inv.status))
     return (

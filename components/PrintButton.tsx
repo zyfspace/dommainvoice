@@ -2,15 +2,60 @@
 
 import { useEffect, useRef, useState } from "react";
 import { printInvoiceAction } from "@/app/actions";
+import { downloadPdf } from "@/lib/pdf";
 import { Icon } from "./Icon";
 import { PrintConfirm } from "./PrintConfirm";
 
+/** Download invoice: kertas di halaman ini dijadikan file PDF dan langsung terunduh (tanpa dialog print). */
+export function DownloadButton({ fileName }: { fileName: string }) {
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function run() {
+    const el = document.querySelector<HTMLElement>("article.inv");
+    if (!el) return;
+    setBusy(true);
+    setErr(null);
+    try {
+      await downloadPdf(el, fileName);
+    } catch {
+      setErr("Gagal membuat PDF, coba lagi.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        className="btn sm"
+        onClick={run}
+        disabled={busy}
+        aria-label="Download invoice (PDF)"
+        title="Download invoice (PDF)"
+      >
+        <Icon n="download" s={14} /> {busy ? "Memproses…" : "Invoice"}
+      </button>
+      {err && <span className="err" style={{ margin: 0 }}>{err}</span>}
+    </>
+  );
+}
+
 /**
- * Tombol cetak invoice. Sebelum dialog print dibuka, cetak dicatat di server:
- * kalau admin lain sudah mencetak duluan, muncul konfirmasi dulu.
- * `confirmed`: user sudah konfirmasi cetak ulang dari halaman detail (?reprint=1).
+ * Tombol cetak invoice: dialog print dibuka di halaman yang sama, tanpa tab baru.
+ * Sebelum dialog dibuka, cetak dicatat di server; kalau admin lain sudah mencetak duluan,
+ * muncul konfirmasi dulu. `confirmed`: cetak ulang sudah dikonfirmasi (?reprint=1).
  */
-export function PrintButton({ id, confirmed = false }: { id: string; confirmed?: boolean }) {
+export function PrintButton({
+  id,
+  confirmed = false,
+  small = false,
+}: {
+  id: string;
+  confirmed?: boolean;
+  small?: boolean;
+}) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [conflict, setConflict] = useState<{ name: string; at: string } | null>(null);
@@ -44,8 +89,14 @@ export function PrintButton({ id, confirmed = false }: { id: string; confirmed?:
 
   return (
     <>
-      <button className="btn pri" onClick={() => run(confirmed)} disabled={busy}>
-        <Icon n="printer" /> {busy ? "Memproses…" : "Cetak / Simpan PDF"}
+      <button
+        className={small ? "btn sm" : "btn pri"}
+        onClick={() => run(confirmed)}
+        disabled={busy}
+        aria-label={small ? "Cetak invoice" : undefined}
+        title={small ? "Cetak invoice" : undefined}
+      >
+        <Icon n="printer" s={small ? 14 : undefined} /> {busy ? "Memproses…" : small ? "Invoice" : "Cetak / Simpan PDF"}
       </button>
       {err && <span className="err" style={{ margin: 0 }}>{err}</span>}
       {conflict && (

@@ -1,5 +1,6 @@
 import "server-only";
 import { createHmac, randomUUID, timingSafeEqual } from "node:crypto";
+import { after } from "next/server";
 import { repo } from "./repo";
 import type { Invoice, WebhookEvent } from "./types";
 
@@ -43,7 +44,8 @@ export async function emit(type: OutboundEvent, inv: Invoice, extra: Record<stri
     last_error: null,
     sent_at: null,
   });
-  await deliver({ id, event_type: type, payload, attempts: 0 });
+  // Kirim ke n8n setelah response terkirim: user tidak menunggu n8n (timeout s/d 8 detik).
+  after(() => deliver({ id, event_type: type, payload, attempts: 0 }));
 }
 
 export async function deliver(w: Pick<WebhookEvent, "id" | "event_type" | "payload" | "attempts">) {
