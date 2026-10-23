@@ -46,7 +46,7 @@ export default async function InvoicesPage({ searchParams }: { searchParams: Pro
           </Link>
         )}
       </div>
-      <div className="chips">
+      <div className="chips filt">
         <Link href={href(null)} className={`chip${!active ? " on" : ""}`}>
           Semua <small>{all.length}</small>
         </Link>

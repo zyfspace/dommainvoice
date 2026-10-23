@@ -745,7 +745,7 @@ export function InvoiceForm({
             <PaymentEditor value={meta.payment_info} onChange={(payment_info) => setMeta((m) => ({ ...m, payment_info }))} />
           </div>
           {!stageCount && (
-          <div className="two" style={{ gridTemplateColumns: "1fr 140px" }}>
+          <div className="two part">
             <div className="f" style={{ marginBottom: 0 }}>
               <label>Baris tagihan parsial (opsional)</label>
               <input
@@ -958,7 +958,7 @@ function PaymentEditor({ value, onChange }: { value: string; onChange: (v: strin
     <>
       <div style={{ display: "grid", gap: 8 }}>
         {rows.map((r) => (
-          <div key={r.key} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div key={r.key} className={`pay-row${r.kind === "link" ? " link" : ""}`}>
             {r.kind === "link" ? (
               <input
                 style={{ flex: 1, minWidth: 0 }}
@@ -968,16 +968,16 @@ function PaymentEditor({ value, onChange }: { value: string; onChange: (v: strin
               />
             ) : (
               <>
-                <input style={{ width: 100 }} value={r.bank} onChange={(e) => set(r.key, { bank: e.target.value })} placeholder="Bank" />
+                <input className="pay-bank" value={r.bank} onChange={(e) => set(r.key, { bank: e.target.value })} placeholder="Bank" />
                 <input
-                  style={{ flex: 1, minWidth: 0 }}
+                  className="pay-no"
                   value={r.no}
                   inputMode="numeric"
                   onChange={(e) => set(r.key, { no: e.target.value })}
                   placeholder="No. rekening"
                 />
                 <input
-                  style={{ flex: 1.4, minWidth: 0 }}
+                  className="pay-name"
                   value={r.name}
                   onChange={(e) => set(r.key, { name: e.target.value })}
                   placeholder="Atas nama"
