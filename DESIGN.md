@@ -10,8 +10,8 @@
   - 12px: Meta & controls (labels, hints, subtitles, breadcrumbs, table headers, compact buttons, segmented toggles, tabs)
   - 13px: UI Body & table data (regular buttons, inputs on desktop, table cells, paragraph text)
   - 14px: Section titles (`.panel h3`, `.card h3`, modal titles)
-  - Mobile (<760px): page titles 18px, metrics 17px, inputs 14px (iOS auto-zoom dicegah via `maximumScale` khusus iOS di `generateViewport`), tap target min. 40px
-  - 17px: Prominent summary metrics (`.sum .row.total b`, mobile stat numbers)
+  - Mobile (<760px): page titles 17px, h2 15px, h3 13.5px, body/paragraf/input/placeholder 13px, metrics 16px (iOS auto-zoom dicegah via `maximumScale` khusus iOS di `generateViewport`), tap target min. 40px
+  - 17px: Prominent summary metrics (`.sum .row.total b`; 16px di mobile)
   - 20px: Page titles (`.top h1`), primary metric figures (`.dstat b`)
   - 24px - 30px: Marketing headline (`.login-art h2`)
 

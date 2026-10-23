@@ -37,6 +37,7 @@ h4 { font-size: 13px; line-height: 1.4; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 input, select, textarea { font: inherit; color: inherit; }
+::placeholder { color: color-mix(in srgb, var(--ink) 40%, var(--paper)); opacity: 1; font-size: inherit; }
 .num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
 .mut { color: var(--mut); }
 .r { text-align: right; }
@@ -430,8 +431,12 @@ a.dstat.hl:hover { background: var(--navy-soft); }
 }
 @media (max-width: 760px) {
   /* Mobile: skala font sedikit diperkecil & seragam, target sentuh min. 40px. */
-  body { font-size: 13px; }
-  h1, .top h1, .login-form h1 { font-size: 18px; }
+  body { font-size: 13px; line-height: 1.5; }
+  h1, .top h1, .login-form h1 { font-size: 17px; line-height: 1.3; }
+  h2 { font-size: 15px; }
+  h3, .panel h3, .card h3 { font-size: 13.5px; }
+  p { font-size: 13px; }
+  .top .sub, .login-form .sub { font-size: 12px; }
   .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; align-content: start; }
   /* Mobile: header tipis di atas (logo + keluar), menu utama jadi tab bar di bawah. */
   .side {
@@ -469,11 +474,14 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .panel h3 { margin-bottom: 12px; }
   .stats { grid-template-columns: 1fr 1fr; }
   .stat { padding: 14px 16px; }
-  .stat b { font-size: 17px; }
+  .stat b { font-size: 16px; }
   .stat:nth-child(2) { border-right: 0; }
   .stat:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
   .dstat { padding: 14px 16px; gap: 2px; }
-  .dstat b { font-size: 17px; }
+  .dstat b { font-size: 16px; }
+  .sum .row.total b { font-size: 16px; }
+  .banner { font-size: 12px; }
+  .banner b, .empty b { font-size: 13px; }
   .chart { padding: 14px 14px 12px; }
   .chart-x { font-size: 10px; margin-left: 40px; }
   .dash-list { min-height: 0; }
@@ -510,14 +518,14 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .kv { flex-wrap: wrap; }
   .login { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .login-art { padding: 20px 16px 22px; min-height: auto; gap: 14px; }
-  .login-art h2 { font-size: 20px; }
+  .login-art h2 { font-size: 18px; }
   .login-art p { font-size: 13px; margin-top: 8px; }
   .login-art .flow { margin-top: 14px; gap: 6px; }
   .login-art small { display: none; }
   .login-form { place-items: start center; padding: 28px 16px 40px; }
   .login-form .sub { margin-bottom: 18px; }
-  /* Input tetap 14px: zoom otomatis iOS dicegah lewat viewport (lihat app/layout.tsx). */
-  .in, .f input, .f select, .f textarea, .rich-line, .rich-view { font-size: 14px; }
+  /* Input 13px sama dengan body: zoom otomatis iOS dicegah lewat viewport (lihat app/layout.tsx). */
+  .in, .f input, .f select, .f textarea, .rich-line, .rich-view, .search input { font-size: 13px; }
   .in, .f input, .f select { height: 40px; }
   .seg { max-width: 100%; overflow-x: auto; }
   .seg button { font-size: 12px; padding: 0 8px; white-space: nowrap; }
