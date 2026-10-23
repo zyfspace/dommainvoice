@@ -276,6 +276,8 @@ table.t.pl { table-layout: fixed; }
 .doc-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; }
 .doc-btns .btn { justify-content: center; min-width: 0; white-space: nowrap; }
 .doc-btns .err { grid-column: 1 / -1; }
+/* Layar sentuh (HP & tablet): tombol lebih tinggi agar mudah ditekan. */
+@media (pointer: coarse) { .doc-btns .btn.sm { height: 40px; font-size: 13px; } }
 
 /* ── Detail ────────────────────────────────────────────── */
 .dgrid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
@@ -523,7 +525,6 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .crumb { margin-bottom: 6px; }
   .btn { height: 40px; }
   .btn.sm { height: 34px; }
-  .doc-btns .btn { height: 40px; font-size: 13px; }
   .search { width: 100%; order: 3; height: 40px; }
   .search.sm { width: 100%; height: 36px; }
   .panel { padding: 16px; }
