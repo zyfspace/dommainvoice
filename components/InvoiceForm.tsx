@@ -314,7 +314,7 @@ export function InvoiceForm({
                 <input
                   value={info.company_name}
                   onChange={(e) => setInfo({ ...info, company_name: e.target.value })}
-                  placeholder="PT …"
+                  placeholder="Nama perusahaan"
                   required
                 />
               </div>
@@ -326,7 +326,7 @@ export function InvoiceForm({
               </div>
               <div className="f">
                 <label>Jabatan PIC</label>
-                <input value={picPosition} onChange={(e) => setPicPosition(e.target.value)} placeholder="mis. Retail Business" />
+                <input value={picPosition} onChange={(e) => setPicPosition(e.target.value)} placeholder="Jabatan PIC" />
               </div>
             </div>
           ) : (
@@ -376,7 +376,7 @@ export function InvoiceForm({
                 </div>
                 <div className="f">
                   <label>Jabatan</label>
-                  <input value={picPosition} onChange={(e) => setPicPosition(e.target.value)} placeholder="mis. Retail Business" />
+                  <input value={picPosition} onChange={(e) => setPicPosition(e.target.value)} placeholder="Jabatan PIC" />
                 </div>
               </div>
               <span className="hint" style={{ marginTop: -8, marginBottom: 14 }}>
@@ -644,7 +644,7 @@ export function InvoiceForm({
                       value={r.product}
                       onChange={(product) => setRow(r.key, { product })}
                       onPick={(p) => setRow(r.key, { sku: p.sku, product: productLabel(p), auto: true })}
-                      placeholder="Cari nama / varian, mis. classic 500 black"
+                      placeholder="Cari nama produk atau varian"
                       required
                     />
                   </div>
@@ -719,7 +719,7 @@ export function InvoiceForm({
                     <input
                       value={r.notes}
                       onChange={(e) => setRow(r.key, { notes: e.target.value })}
-                      placeholder="Contoh: engrave logo di sisi kanan"
+                      placeholder="Catatan untuk item ini"
                     />
                   </div>
                 </div>
@@ -773,7 +773,7 @@ export function InvoiceForm({
               <input
                 value={meta.payable_label}
                 onChange={(e) => setMeta({ ...meta, payable_label: e.target.value })}
-                placeholder="DP 50% / Total Termin 3"
+                placeholder="Label baris tagihan"
               />
             </div>
             <div className="f" style={{ marginBottom: 0 }}>

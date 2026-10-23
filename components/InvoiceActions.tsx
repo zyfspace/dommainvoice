@@ -152,7 +152,7 @@ export function InvoiceActions({ inv, role, group }: { inv: Invoice; role: Role;
               action={financeAction}
               field="notes"
               extra={{ action: "revision" }}
-              placeholder="Contoh: Mohon perbaiki jumlah produk"
+              placeholder="Catatan revisi"
               submit="Kirim permintaan revisi"
             />
             <NoteForm
@@ -190,7 +190,7 @@ export function InvoiceActions({ inv, role, group }: { inv: Invoice; role: Role;
             label="Batalkan invoice"
             action={cancelAction}
             field="reason"
-            placeholder="Alasan pembatalan, mis. Payment deadline expired"
+            placeholder="Alasan pembatalan"
             submit="Batalkan invoice"
           />
         )}
