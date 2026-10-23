@@ -151,6 +151,8 @@ function validate(input: InvoiceInput): NewItem[] {
     if (!i.uom?.trim()) throw new ServiceError(`UoM "${i.product}" wajib diisi.`);
     if (!(i.quantity > 0)) throw new ServiceError(`Quantity "${i.product}" harus lebih dari 0.`);
     if (!(i.unit_price >= 0)) throw new ServiceError(`Harga "${i.product}" tidak valid.`);
+    if (!(i.discount_percent >= 0 && i.discount_percent < 100))
+      throw new ServiceError(`Diskon "${i.product}" harus 0–99,99%.`);
     if (!["engrave", "uv_print", "plain"].includes(i.customization))
       throw new ServiceError("Customization tidak valid.");
   }
@@ -163,6 +165,7 @@ function validate(input: InvoiceInput): NewItem[] {
     quantity: i.quantity,
     uom: i.uom.trim(),
     unit_price: i.unit_price,
+    discount_percent: i.discount_percent,
     customization: i.customization,
     notes: i.notes?.trim() || null,
     line_total: lines[idx],

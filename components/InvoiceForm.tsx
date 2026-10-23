@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { saveInvoiceAction } from "@/app/actions";
 import { DEFAULT_REMARKS, ENTITIES, UOM_OPTIONS } from "@/lib/company";
-import { CUSTOMIZATION_LABEL, DEFAULT_TAX_RATE, DEFAULT_TERM, PAYMENT_TYPES, computeTotals, rupiah } from "@/lib/domain";
+import { CUSTOMIZATION_LABEL, DEFAULT_TAX_RATE, DEFAULT_TERM, PAYMENT_TYPES, computeTotals, discounted, rupiah } from "@/lib/domain";
 import type { Customer, Customization, Entity, InvoiceFull, PaymentType } from "@/lib/types";
 import { DEFAULT_PRICELIST, quotePrice, type Pricelist } from "@/lib/pricelist";
 import { productLabel } from "@/lib/products";
@@ -21,6 +21,7 @@ type Row = {
   quantity: string;
   uom: string;
   unit_price: string;
+  discount: string;
   customization: Customization;
   notes: string;
   /** true = unit price mengikuti pricelist (berhenti saat diisi manual). */
@@ -37,6 +38,7 @@ const blank = (): Row => ({
   quantity: "1",
   uom: "Pcs",
   unit_price: "",
+  discount: "",
   customization: "plain",
   notes: "",
   auto: true,
@@ -123,6 +125,7 @@ export function InvoiceForm({
           quantity: String(i.quantity),
           uom: i.uom ?? "Pcs",
           unit_price: String(i.unit_price),
+          discount: i.discount_percent ? String(i.discount_percent) : "",
           customization: i.customization,
           notes: i.notes ?? "",
           auto: false,
@@ -134,7 +137,11 @@ export function InvoiceForm({
   const totals = useMemo(
     () =>
       computeTotals(
-        rows.map((r) => ({ quantity: Number(r.quantity) || 0, unit_price: Number(r.unit_price) || 0 })),
+        rows.map((r) => ({
+          quantity: Number(r.quantity) || 0,
+          unit_price: Number(r.unit_price) || 0,
+          discount_percent: Number(r.discount) || 0,
+        })),
         meta.tax_rate,
         Number(meta.payable_percent) || null,
       ),
@@ -268,6 +275,7 @@ export function InvoiceForm({
       quantity: Number(r.quantity) || 0,
       uom: r.uom || "Pcs",
       unit_price: Number(r.unit_price) || 0,
+      discount_percent: Number(r.discount) || 0,
       customization: r.customization,
       notes: r.notes || null,
       line_total: totals.lines[i] ?? 0,
@@ -693,6 +701,20 @@ export function InvoiceForm({
                     />
                   </div>
                   <div className="f">
+                    <label>Diskon (%)</label>
+                    <input
+                      type="number"
+                      {...noSpin}
+                      min="0"
+                      max="99.99"
+                      step="0.01"
+                      inputMode="decimal"
+                      value={r.discount}
+                      onChange={(e) => setRow(r.key, { discount: e.target.value })}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div className="f">
                     <label>Catatan item (opsional)</label>
                     <input
                       value={r.notes}
@@ -885,14 +907,21 @@ function PriceHint({ row, list, onApply }: { row: Row; list: Pricelist; onApply:
   const q = quoteOf(row, list);
   if (!q) return null;
   const price = Number(row.unit_price);
-  const below = row.unit_price !== "" && price < q.min;
+  const disc = Number(row.discount) || 0;
+  const net = discounted(price, disc);
+  const below = row.unit_price !== "" && net < q.min;
   return (
     <div className={`price-hint${below ? " warn" : ""}`}>
       <span>
         Pricelist {q.series} · {q.tier}
         {row.customization === "uv_print" ? " · dasar non-engrave, biaya UV menyusul" : ""}:{" "}
         <b className="num">{rupiah(q.normal)}</b> normal · <b className="num">{rupiah(q.min)}</b> min
-        {below && " — di bawah harga minimum"}
+        {disc > 0 && row.unit_price !== "" && (
+          <>
+            {" "}· setelah diskon <b className="num">{rupiah(net)}</b>
+          </>
+        )}
+        {below && ", di bawah harga minimum"}
       </span>
       {price !== q.normal && (
         <button type="button" className="link" onClick={() => onApply(String(q.normal))}>

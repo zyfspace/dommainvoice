@@ -98,6 +98,7 @@ export async function saveInvoiceAction(_: FormState, fd: FormData): Promise<For
     ...i,
     quantity: Number(i.quantity),
     unit_price: Number(i.unit_price),
+    discount_percent: Number(i.discount_percent) || 0,
   }));
   let target = id;
   const res = await guard(async () => {

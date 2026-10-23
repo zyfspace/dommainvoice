@@ -101,12 +101,15 @@ export function suratJalanReady(inv: GroupMember & Pick<Invoice, "group_id">, gr
 
 const round = (n: number) => Math.round(n * 100) / 100;
 
+/** Harga satuan setelah diskon % baris. */
+export const discounted = (price: number, percent = 0) => round(price * (1 - (percent || 0) / 100));
+
 export function computeTotals(
-  items: Pick<ItemInput, "quantity" | "unit_price">[],
+  items: (Pick<ItemInput, "quantity" | "unit_price"> & { discount_percent?: number })[],
   taxRate: number,
   payablePercent: number | null = null,
 ) {
-  const lines = items.map((i) => round(i.quantity * i.unit_price));
+  const lines = items.map((i) => round(i.quantity * discounted(i.unit_price, i.discount_percent)));
   const subtotal = round(lines.reduce((a, b) => a + b, 0));
   const tax_amount = round((subtotal * taxRate) / 100);
   const total = round(subtotal + tax_amount);

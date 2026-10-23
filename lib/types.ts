@@ -59,12 +59,14 @@ export interface InvoiceItem {
   quantity: number;
   uom: string;
   unit_price: number;
+  /** Diskon % per baris (0 = tanpa diskon). */
+  discount_percent: number;
   customization: Customization;
   notes: string | null;
   line_total: number;
 }
 
-export type ItemInput = Pick<InvoiceItem, "sku" | "product" | "quantity" | "uom" | "unit_price" | "customization" | "notes">;
+export type ItemInput = Pick<InvoiceItem, "sku" | "product" | "quantity" | "uom" | "unit_price" | "discount_percent" | "customization" | "notes">;
 
 export interface Invoice {
   id: string;
