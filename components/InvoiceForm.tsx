@@ -909,7 +909,8 @@ function PriceHint({ row, list, onApply }: { row: Row; list: Pricelist; onApply:
   const price = Number(row.unit_price);
   const disc = Number(row.discount) || 0;
   const net = discounted(price, disc);
-  const below = row.unit_price !== "" && net < q.min;
+  // Diskon = kesepakatan seller & buyer, jadi yang dicek terhadap harga minimum hanya unit price sebelum diskon.
+  const below = row.unit_price !== "" && price < q.min;
   return (
     <div className={`price-hint${below ? " warn" : ""}`}>
       <span>
