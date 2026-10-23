@@ -16,15 +16,19 @@ export function InvoiceGroup({ current, group }: { current: Invoice; group: Invo
         {group.map((g) => {
           const body = (
             <>
-              <span className="grp-k">{installmentLabel(g) ?? "—"}</span>
-              <span className="grp-main">
-                <b className="num">{g.invoice_number ?? "Belum bernomor"}</b>
-                <small>
-                  {g.payable_percent}% · {rupiah(invoiceDue(g))} · due {fmtDate(g.due_date)}
-                  {g.id === gate?.id && " · syarat kirim"}
-                </small>
+              <span className="grp-top">
+                <span className="grp-k">
+                  {installmentLabel(g) ?? "—"}
+                  {g.payable_percent != null && <em className="num">{g.payable_percent}%</em>}
+                  {g.id === gate?.id && <span className="tag">Syarat kirim</span>}
+                </span>
+                <StatusPair inv={g} />
               </span>
-              <StatusPair inv={g} />
+              <b className="grp-no num">{g.invoice_number ?? "Belum bernomor"}</b>
+              <span className="grp-meta">
+                <span className="num">{rupiah(invoiceDue(g))}</span>
+                <span>Due {fmtDate(g.due_date)}</span>
+              </span>
             </>
           );
           return (
@@ -35,8 +39,8 @@ export function InvoiceGroup({ current, group }: { current: Invoice; group: Invo
         })}
       </ul>
       <p className="hint" style={{ marginBottom: 0 }}>
-        Diajukan, disetujui & direvisi bersamaan. Bukti bayar diupload per invoice. Surat Jalan dicetak dari invoice{" "}
-        <b>{gate ? installmentLabel(gate) : "terakhir"}</b> setelah tahap itu & sebelumnya Paid.
+        Semua tahap diajukan dan di-approve bersamaan, bukti bayar diupload per invoice. Surat Jalan dicetak dari tahap{" "}
+        <b>{gate ? installmentLabel(gate) : "terakhir"}</b> setelah tahap itu dan sebelumnya Paid.
       </p>
     </div>
   );
