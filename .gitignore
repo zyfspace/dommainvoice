@@ -9,3 +9,4 @@ next-env.d.ts
 Domma - Invoice Management Dashboard/
 
 threads-carousel/
+.playwright-mcp/

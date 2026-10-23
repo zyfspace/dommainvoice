@@ -51,7 +51,7 @@ export function CustomerForm({
             <label>
               Nama perusahaan <i>*</i>
             </label>
-            <input name="company_name" defaultValue={initial?.company_name} required placeholder="PT Contoh Sejahtera" />
+            <input name="company_name" defaultValue={initial?.company_name} required placeholder="Nama perusahaan" />
           </div>
           <div className="two">
             <div className="f">

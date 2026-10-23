@@ -98,11 +98,11 @@ export function SuratJalanForm({
           <div className="two">
             <div className="f">
               <label>No. PO</label>
-              <input value={po} onChange={(e) => setPo(e.target.value)} placeholder="mis. 5900008950" />
+              <input value={po} onChange={(e) => setPo(e.target.value)} placeholder="Nomor PO" />
             </div>
             <div className="f">
               <label>No. Vendor</label>
-              <input value={vendor} onChange={(e) => setVendor(e.target.value)} placeholder="mis. 1000053001" />
+              <input value={vendor} onChange={(e) => setVendor(e.target.value)} placeholder="Nomor vendor" />
             </div>
           </div>
           <div className="f" style={{ marginBottom: 0 }}>

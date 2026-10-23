@@ -14,7 +14,7 @@ export function LoginForm() {
       {state?.error && <div className="err">{state.error}</div>}
       <div className="f">
         <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" autoComplete="username" placeholder="nama@withdomma.com" required autoFocus />
+        <input id="email" name="email" type="email" autoComplete="username" placeholder="email@perusahaan.com" required autoFocus />
       </div>
       <div className="f">
         <label htmlFor="password">Password</label>

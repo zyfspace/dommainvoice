@@ -28,7 +28,7 @@ function UploadForm({ inv }: { inv: InvoiceFull }) {
       </label>
       <div className="f" style={{ marginTop: 12 }}>
         <label>Catatan</label>
-        <input name="notes" placeholder="Opsional, mis. transfer dari BCA a.n. …" />
+        <input name="notes" placeholder="Catatan (opsional)" />
       </div>
       <button className="btn pri block" disabled={pending || !file}>
         <Icon n="check" /> {pending ? "Mengupload…" : "Upload & tandai Paid"}
