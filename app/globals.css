@@ -13,8 +13,10 @@
   --navy-soft: color-mix(in srgb, var(--paper) 8%, var(--navy));
   --r: 8px;
   --font-body: var(--f-geist), system-ui, sans-serif;
-  --font-head: var(--f-manrope), var(--f-geist), sans-serif;
-  --font-num: var(--f-dmsans), var(--f-geist), sans-serif;
+  --font-head: var(--font-body);
+  --font-num: var(--font-body);
+  --font-doc: var(--f-dmsans), var(--f-geist), sans-serif;
+  --font-doc-head: var(--f-manrope), var(--f-geist), sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; }
@@ -330,7 +332,7 @@ details.act[open] summary { margin-bottom: 10px; }
 
 /* ── Invoice document (template Domma) ──────────────────
    Satuan pt agar identik antara layar, cetak, dan HTML → PDF.
-   Font: DM Sans (isi) + Manrope (judul INVOICE). Skala ukuran:
+   Font: DM Sans (isi) + Manrope (judul INVOICE), beda dari UI yang pakai Geist. Skala ukuran:
    judul 24pt · nama entitas & label 8.5pt bold · isi 8.5pt · tabel 8pt · catatan item 7pt */
 .inv-wrap { border: 1px solid var(--line); border-radius: 8px; background: var(--soft); padding: 12px; overflow: hidden; }
 .paper-fit { position: relative; overflow: hidden; }
@@ -338,7 +340,7 @@ details.act[open] summary { margin-bottom: 10px; }
 .inv {
   --inv-line: var(--ink);
   width: 297mm; min-height: 210mm; padding: 11mm 15mm 10mm;
-  font-family: var(--font-num); font-size: 8.5pt; line-height: 1.45; color: var(--ink); background: var(--paper);
+  font-family: var(--font-doc); font-size: 8.5pt; line-height: 1.45; color: var(--ink); background: var(--paper);
 }
 .inv b { font-weight: 700; }
 .inv-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24pt; }
@@ -346,7 +348,7 @@ details.act[open] summary { margin-bottom: 10px; }
 .inv-from { line-height: 1.4; }
 .inv-from b { display: block; }
 .inv-title { text-align: right; padding-top: 4pt; }
-.inv-title h2 { font-family: var(--font-head); font-weight: 800; font-size: 24pt; letter-spacing: 0.02em; line-height: 1; color: var(--ink); }
+.inv-title h2 { font-family: var(--font-doc-head); font-weight: 800; font-size: 24pt; letter-spacing: 0.02em; line-height: 1; color: var(--ink); }
 .inv-stamp { display: inline-block; margin-top: 8pt; border: 1px solid var(--navy); color: var(--navy); border-radius: 3pt; padding: 1pt 6pt; font-size: 7pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 .inv-info { display: grid; grid-template-columns: 1fr 1fr; gap: 24pt; margin-top: 16pt; }
 .inv-cust b { display: block; }
@@ -669,7 +671,7 @@ input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
 .inv.sj { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; }
 .sj-logo { display: block; height: 22pt; width: auto; margin-bottom: 8pt; }
 .sj-from { font-size: 6.5pt; line-height: 1.5; }
-.sj-title { font-family: var(--font-head); font-weight: 700; font-size: 18pt; padding-top: 2pt; }
+.sj-title { font-family: var(--font-doc-head); font-weight: 700; font-size: 18pt; padding-top: 2pt; }
 .sj-info { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24pt; margin-top: 16pt; }
 .sj-info .inv-cust div { text-transform: uppercase; }
 .sj-info .inv-cust div:last-child { text-transform: none; }

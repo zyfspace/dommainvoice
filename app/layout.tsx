@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--f-geist" });
+// Khusus dokumen invoice & surat jalan (template Domma).
 const manrope = Manrope({ subsets: ["latin"], variable: "--f-manrope" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--f-dmsans" });
 
