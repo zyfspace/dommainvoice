@@ -52,7 +52,7 @@ async function log(
   await repo.insertEvent({
     invoice_id: inv.id,
     actor_id: actor?.id ?? null,
-    actor_email: actor?.email ?? "system (n8n)",
+    actor_email: actor?.email ?? "system",
     action,
     from_status: from,
     to_status: to,
