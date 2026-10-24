@@ -4,12 +4,14 @@ import { Icon } from "@/components/Icon";
 import { InvoiceActions } from "@/components/InvoiceActions";
 import { InvoiceGroup } from "@/components/InvoiceGroup";
 import { InvoicePaper } from "@/components/InvoicePaper";
+import { IssueProgress } from "@/components/IssueProgress";
 import { PaymentsPanel } from "@/components/PaymentsPanel";
 import { RevisionNotes } from "@/components/RevisionNotes";
 import { StatusPair } from "@/components/Status";
 import { requireProfile } from "@/lib/auth";
 import { STATUS_LABEL, fmtDateTime } from "@/lib/domain";
 import { getInvoiceCached, repo } from "@/lib/repo";
+import type { InvoiceFull } from "@/lib/types";
 
 const ACTION_LABEL: Record<string, string> = {
   created: "Invoice dibuat",
@@ -20,15 +22,32 @@ const ACTION_LABEL: Record<string, string> = {
   rejected: "Ditolak Finance",
   revision_requested: "Revisi diminta",
   cancelled: "Dibatalkan",
-  issued: "PDF diterbitkan (n8n)",
-  issued_manual: "Ditandai Issued manual",
+  issued: "PDF diterbitkan otomatis",
+  issued_manual: "Diterbitkan manual",
   paid: "Bukti pembayaran diupload — Paid",
   printed: "Invoice dicetak",
   reprinted: "Invoice dicetak ulang",
   email_sent: "Email terkirim",
   sheets_synced: "Tersinkron ke Google Sheets",
-  workflow_failed: "Workflow n8n gagal",
+  workflow_failed: "Penerbitan otomatis gagal",
 };
+
+const ISSUE_EVENTS = ["issued", "email_sent", "sheets_synced", "workflow_failed"];
+
+/** Progres penerbitan otomatis; null kalau tidak relevan (belum approve, sudah lanjut, atau diterbitkan manual). */
+function issueState(inv: InvoiceFull) {
+  if (inv.status !== "approved" && inv.status !== "issued") return null;
+  if (inv.events.some((e) => e.action === "issued_manual")) return null;
+  const last = [...inv.events].reverse().find((e) => e.action === "approved" || ISSUE_EVENTS.includes(e.action));
+  return {
+    steps: [
+      { label: "PDF invoice dibuat", at: inv.issued_at },
+      { label: "Email terkirim ke customer", at: inv.email_sent_at },
+      { label: "Tercatat di Google Sheets", at: inv.sheets_synced_at },
+    ],
+    failed: last?.action === "workflow_failed" ? (last.notes ?? "tidak diketahui") : null,
+  };
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const inv = await getInvoiceCached((await params).id);
@@ -43,6 +62,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
   const group = inv.group_id ? await repo.listGroup(inv.group_id) : [inv];
   const lastEvent = [...inv.events].reverse().find((e) => e.to_status === inv.status);
   const lastNote = lastEvent?.notes;
+  const issue = issueState(inv);
 
   return (
     <>
@@ -84,15 +104,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
           </div>
         </div>
       )}
-      {inv.status === "approved" && (
-        <div className="banner">
-          <Icon n="refresh" s={18} />
-          <div>
-            <b>Menunggu penerbitan PDF</b>
-            n8n akan membuat PDF, mengirim email, dan sinkron ke Google Sheets.
-          </div>
-        </div>
-      )}
+      {issue && <IssueProgress steps={issue.steps} failed={issue.failed} />}
 
       <div className="dgrid">
         <div className="dpanels">

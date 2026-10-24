@@ -295,6 +295,16 @@ table.t.pl { table-layout: fixed; }
 .rev-list li { counter-increment: rev; display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 6px; background: rgb(255 255 255 / 0.08); }
 .rev-list li::before { content: counter(rev); flex: none; width: 18px; height: 18px; margin-top: 1px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); color: var(--ink); font-size: 11px; font-weight: 600; }
 .rev-list li span { min-width: 0; overflow-wrap: anywhere; }
+.issue-steps { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.issue-steps li { display: flex; align-items: center; gap: 10px; }
+.issue-steps li > span:nth-child(2) { flex: 1; min-width: 0; }
+.issue-steps small { font-size: 12px; opacity: 0.65; white-space: nowrap; }
+.issue-steps .dot { flex: none; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid currentColor; display: grid; place-items: center; opacity: 0.4; }
+.issue-steps li.done .dot { background: var(--navy); border-color: var(--navy); color: var(--paper); opacity: 1; }
+.banner.dark .issue-steps li.done .dot { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.issue-steps li.wait .dot { border-top-color: transparent; opacity: 0.7; animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .issue-steps li.wait .dot { animation: none; } }
 .kv { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; font-size: 13px; }
 .kv span:first-child { color: var(--mut); font-size: 12px; }
 .kv span:last-child { text-align: right; overflow-wrap: anywhere; }
