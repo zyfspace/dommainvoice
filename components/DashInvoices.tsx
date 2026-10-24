@@ -12,10 +12,10 @@ type Tab = { key: string; label: string; match: (i: Invoice) => boolean };
 const PAGE = 25;
 
 export function DashInvoices({ rows, todo }: { rows: Invoice[]; todo: InvoiceStatus[] }) {
-  const tabs: Tab[] = useMemo(
+  const tabs = useMemo<Tab[]>(
     () => [
-      { key: "todo", label: "Perlu tindakan", match: (i) => todo.includes(i.status) },
       { key: "all", label: "Semua", match: () => true },
+      { key: "todo", label: "Perlu tindakan", match: (i) => todo.includes(i.status) },
       { key: "on_check", label: "On Check", match: (i) => i.status === "on_check" },
       { key: "approved", label: "Approved", match: (i) => i.status === "approved" },
       { key: "issued", label: "Issued", match: (i) => i.status === "issued" },
@@ -30,7 +30,7 @@ export function DashInvoices({ rows, todo }: { rows: Invoice[]; todo: InvoiceSta
   const [page, setPage] = useState(1);
 
   const list = useMemo(() => {
-    const t = tabs.find((x) => x.key === tab) ?? tabs[1];
+    const t = tabs.find((x) => x.key === tab) ?? tabs[0];
     const s = q.trim().toLowerCase();
     return rows.filter(
       (i) =>
