@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { InvoiceForm } from "@/components/InvoiceForm";
+import { RevisionNotes } from "@/components/RevisionNotes";
 import { Status } from "@/components/Status";
 import { requireProfile } from "@/lib/auth";
 import { EDITABLE, deliveryGate, todayJakarta } from "@/lib/domain";
@@ -38,13 +39,7 @@ export default async function EditInvoicePage({ params }: { params: Promise<{ id
         <Status s={inv.status} lg />
       </div>
       {inv.revision_notes && inv.status === "revision_requested" && (
-        <div className="banner dark">
-          <Icon n="alert" s={18} />
-          <div>
-            <b>Catatan revisi dari Finance</b>
-            {inv.revision_notes}
-          </div>
-        </div>
+        <RevisionNotes title="Catatan revisi dari Finance" notes={inv.revision_notes} />
       )}
       <InvoiceForm customers={customers} initial={inv} pricelist={pricelist} schedule={schedule} deliveryAfter={deliveryAfter} defaults={{ invoice_date: todayJakarta(), due_date: todayJakarta(14) }} />
     </>

@@ -113,7 +113,7 @@ function IssueManual({ id }: { id: string }) {
       <form action={act}>
         <input type="hidden" name="id" value={id} />
         <p className="hint" style={{ margin: "0 0 8px" }}>
-          Fallback bila workflow n8n belum aktif/gagal. Kosongkan URL untuk memakai halaman cetak dashboard.
+          Pakai ini kalau penerbitan otomatis gagal. Kosongkan URL untuk memakai halaman cetak dashboard.
         </p>
         <input className="in" name="pdf_url" type="url" placeholder="URL PDF (opsional)" />
         <button className="btn block" style={{ marginTop: 8 }} disabled={pending}>
@@ -135,7 +135,7 @@ export function InvoiceActions({ inv, role, group }: { inv: Invoice; role: Role;
 
   return (
     <div className="panel">
-      <h3>Aksi</h3>
+      <h3>Tindakan</h3>
       <div className="actions" style={{ marginTop: 0 }}>
         {adminCan && (
           <>
