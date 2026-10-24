@@ -1,11 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Geist, Manrope } from "next/font/google";
+import { Geist } from "next/font/google";
 import { headers } from "next/headers";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--f-geist" });
-const manrope = Manrope({ subsets: ["latin"], variable: "--f-manrope" });
-const dmSans = DM_Sans({ subsets: ["latin"], variable: "--f-dmsans" });
 
 export const metadata: Metadata = {
   title: { default: "Domma Invoice", template: "%s · Domma Invoice" },
@@ -23,7 +21,7 @@ export async function generateViewport(): Promise<Viewport> {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={`${geist.variable} ${manrope.variable} ${dmSans.variable}`} suppressHydrationWarning>
+    <html lang="id" className={geist.variable} suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

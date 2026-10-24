@@ -13,8 +13,8 @@
   --navy-soft: color-mix(in srgb, var(--paper) 8%, var(--navy));
   --r: 8px;
   --font-body: var(--f-geist), system-ui, sans-serif;
-  --font-head: var(--f-manrope), var(--f-geist), sans-serif;
-  --font-num: var(--f-dmsans), var(--f-geist), sans-serif;
+  --font-head: var(--font-body);
+  --font-num: var(--font-body);
 }
 
 * { box-sizing: border-box; margin: 0; }
@@ -330,7 +330,7 @@ details.act[open] summary { margin-bottom: 10px; }
 
 /* ── Invoice document (template Domma) ──────────────────
    Satuan pt agar identik antara layar, cetak, dan HTML → PDF.
-   Font: DM Sans (isi) + Manrope (judul INVOICE). Skala ukuran:
+   Font: Geist (sama dengan UI). Skala ukuran:
    judul 24pt · nama entitas & label 8.5pt bold · isi 8.5pt · tabel 8pt · catatan item 7pt */
 .inv-wrap { border: 1px solid var(--line); border-radius: 8px; background: var(--soft); padding: 12px; overflow: hidden; }
 .paper-fit { position: relative; overflow: hidden; }
