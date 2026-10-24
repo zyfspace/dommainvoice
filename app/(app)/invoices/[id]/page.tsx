@@ -4,7 +4,7 @@ import { Icon } from "@/components/Icon";
 import { InvoiceActions } from "@/components/InvoiceActions";
 import { InvoiceGroup } from "@/components/InvoiceGroup";
 import { InvoicePaper } from "@/components/InvoicePaper";
-import { IssueProgress } from "@/components/IssueProgress";
+import { IssueWatcher } from "@/components/IssueWatcher";
 import { PaymentsPanel } from "@/components/PaymentsPanel";
 import { RevisionNotes } from "@/components/RevisionNotes";
 import { StatusPair } from "@/components/Status";
@@ -34,19 +34,13 @@ const ACTION_LABEL: Record<string, string> = {
 
 const ISSUE_EVENTS = ["issued", "email_sent", "sheets_synced", "workflow_failed"];
 
-/** Progres penerbitan otomatis; null kalau tidak relevan (belum approve, sudah lanjut, atau diterbitkan manual). */
-function issueState(inv: InvoiceFull) {
-  if (inv.status !== "approved" && inv.status !== "issued") return null;
-  if (inv.events.some((e) => e.action === "issued_manual")) return null;
+/** True selama penerbitan otomatis masih berjalan (belum lengkap, belum gagal, bukan terbit manual). */
+function issuePending(inv: InvoiceFull) {
+  if (inv.status !== "approved" && inv.status !== "issued") return false;
+  if (inv.events.some((e) => e.action === "issued_manual")) return false;
+  if (inv.issued_at && inv.email_sent_at && inv.sheets_synced_at) return false;
   const last = [...inv.events].reverse().find((e) => e.action === "approved" || ISSUE_EVENTS.includes(e.action));
-  return {
-    steps: [
-      { label: "PDF invoice dibuat", at: inv.issued_at },
-      { label: "Email notifikasi terkirim ke admin & Finance", at: inv.email_sent_at },
-      { label: "Tercatat di Google Sheets", at: inv.sheets_synced_at },
-    ],
-    failed: last?.action === "workflow_failed" ? (last.notes ?? "tidak diketahui") : null,
-  };
+  return last?.action !== "workflow_failed";
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -62,7 +56,6 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
   const group = inv.group_id ? await repo.listGroup(inv.group_id) : [inv];
   const lastEvent = [...inv.events].reverse().find((e) => e.to_status === inv.status);
   const lastNote = lastEvent?.notes;
-  const issue = issueState(inv);
 
   return (
     <>
@@ -104,7 +97,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
           </div>
         </div>
       )}
-      {issue && <IssueProgress steps={issue.steps} failed={issue.failed} />}
+      <IssueWatcher pending={issuePending(inv)} />
 
       <div className="dgrid">
         <div className="dpanels">
