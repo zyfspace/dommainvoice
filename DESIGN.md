@@ -1,7 +1,8 @@
 # Design System & Tokens: Domma Invoice
 
 ## Typography
-- Font: Geist (`--f-geist`, Google Fonts) untuk semua teks: body, heading, angka, dan dokumen invoice.
+- Font UI: Geist (`--f-geist`, Google Fonts) untuk semua teks aplikasi: body, heading, dan angka.
+- Font dokumen (kertas invoice & surat jalan): DM Sans untuk isi (`--font-doc`), Manrope untuk judul (`--font-doc-head`).
   - `--font-head` dan `--font-num` tetap ada sebagai alias ke `--font-body`; angka memakai `font-variant-numeric: tabular-nums`.
 - Type Scale:
   - 11px: Micro (chart labels, tags, count badges, microcopy)
