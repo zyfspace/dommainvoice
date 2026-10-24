@@ -4,7 +4,7 @@ import { noSpin } from "@/lib/input";
 import Link from "next/link";
 import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { saveInvoiceAction } from "@/app/actions";
-import { DEFAULT_REMARKS, ENTITIES, UOM_OPTIONS } from "@/lib/company";
+import { COURIER_OPTIONS, DEFAULT_REMARKS, ENTITIES, UOM_OPTIONS } from "@/lib/company";
 import { CUSTOMIZATION_LABEL, DEFAULT_TAX_RATE, PAYMENT_TYPES, computeTotals, discounted, rupiah } from "@/lib/domain";
 import type { Customer, Customization, Entity, InvoiceFull, PaymentType } from "@/lib/types";
 import { DEFAULT_PRICELIST, quotePrice, type Pricelist } from "@/lib/pricelist";
@@ -24,6 +24,9 @@ type Row = {
   discount: string;
   customization: Customization;
   notes: string;
+  /** Khusus baris pengiriman. */
+  ship_courier: string;
+  ship_city: string;
   /** true = unit price mengikuti pricelist (berhenti saat diisi manual). */
   auto: boolean;
   /** Baris biaya pengiriman: tanpa SKU, customization, diskon & pricelist. */
@@ -46,6 +49,8 @@ const blank = (): Row => ({
   discount: "",
   customization: "plain",
   notes: "",
+  ship_courier: "",
+  ship_city: "",
   auto: true,
 });
 
@@ -133,6 +138,8 @@ export function InvoiceForm({
           discount: i.discount_percent ? String(i.discount_percent) : "",
           customization: i.customization,
           notes: i.notes ?? "",
+          ship_courier: i.ship_courier ?? "",
+          ship_city: i.ship_city ?? "",
           auto: false,
           ship: i.product === SHIP_PRODUCT && !i.sku,
         }))
@@ -280,6 +287,8 @@ export function InvoiceForm({
       discount_percent: Number(r.discount) || 0,
       customization: r.customization,
       notes: r.notes || null,
+      ship_courier: r.ship ? r.ship_courier || null : null,
+      ship_city: r.ship ? r.ship_city || null : null,
       line_total: totals.lines[i] ?? 0,
     })),
   });
@@ -631,11 +640,20 @@ export function InvoiceForm({
                 {r.ship ? (
                   <div className="item-ship">
                     <div className="f">
-                      <label>Keterangan (opsional)</label>
+                      <label>Kurir</label>
                       <input
-                        value={r.notes}
-                        onChange={(e) => setRow(r.key, { notes: e.target.value })}
-                        placeholder="Kurir, kota tujuan, dll."
+                        list="courier-list"
+                        value={r.ship_courier}
+                        onChange={(e) => setRow(r.key, { ship_courier: e.target.value })}
+                        placeholder="Lalamove, J&T, dll."
+                      />
+                    </div>
+                    <div className="f">
+                      <label>Kota tujuan</label>
+                      <input
+                        value={r.ship_city}
+                        onChange={(e) => setRow(r.key, { ship_city: e.target.value })}
+                        placeholder="Jakarta"
                       />
                     </div>
                     <div className="f">
@@ -673,6 +691,14 @@ export function InvoiceForm({
                         onChange={(e) => setRow(r.key, { unit_price: e.target.value })}
                         placeholder="0"
                         required
+                      />
+                    </div>
+                    <div className="f ship-note">
+                      <label>Keterangan (opsional)</label>
+                      <input
+                        value={r.notes}
+                        onChange={(e) => setRow(r.key, { notes: e.target.value })}
+                        placeholder="Nomor resi, catatan pengiriman, dll."
                       />
                     </div>
                   </div>
@@ -784,6 +810,11 @@ export function InvoiceForm({
           <datalist id="uom-list">
             {UOM_OPTIONS.map((u) => (
               <option key={u} value={u} />
+            ))}
+          </datalist>
+          <datalist id="courier-list">
+            {COURIER_OPTIONS.map((c) => (
+              <option key={c} value={c} />
             ))}
           </datalist>
           <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
