@@ -42,7 +42,7 @@ function issueState(inv: InvoiceFull) {
   return {
     steps: [
       { label: "PDF invoice dibuat", at: inv.issued_at },
-      { label: "Email terkirim ke customer", at: inv.email_sent_at },
+      { label: "Email notifikasi terkirim ke admin & Finance", at: inv.email_sent_at },
       { label: "Tercatat di Google Sheets", at: inv.sheets_synced_at },
     ],
     failed: last?.action === "workflow_failed" ? (last.notes ?? "tidak diketahui") : null,

@@ -44,7 +44,7 @@ export function IssueProgress({ steps, failed }: { steps: Step[]; failed: string
       ? "Penerbitan otomatis terhenti"
       : "Invoice sedang diterbitkan";
   const desc = done
-    ? "PDF sudah jadi, email sudah dikirim ke customer, dan data sudah tercatat di Google Sheets."
+    ? "PDF sudah jadi, email notifikasi sudah terkirim ke admin dan Finance, dan data sudah tercatat di Google Sheets."
     : failed
       ? `Ada tahap yang gagal: ${failed}. Hubungi admin sistem atau terbitkan manual.`
       : stale
