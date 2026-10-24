@@ -5,6 +5,7 @@ import { InvoiceActions } from "@/components/InvoiceActions";
 import { InvoiceGroup } from "@/components/InvoiceGroup";
 import { InvoicePaper } from "@/components/InvoicePaper";
 import { PaymentsPanel } from "@/components/PaymentsPanel";
+import { RevisionNotes } from "@/components/RevisionNotes";
 import { StatusPair } from "@/components/Status";
 import { requireProfile } from "@/lib/auth";
 import { STATUS_LABEL, fmtDateTime } from "@/lib/domain";
@@ -40,7 +41,8 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
   const inv = await getInvoiceCached(id);
   if (!inv) notFound();
   const group = inv.group_id ? await repo.listGroup(inv.group_id) : [inv];
-  const lastNote = [...inv.events].reverse().find((e) => e.to_status === inv.status)?.notes;
+  const lastEvent = [...inv.events].reverse().find((e) => e.to_status === inv.status);
+  const lastNote = lastEvent?.notes;
 
   return (
     <>
@@ -58,13 +60,11 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ id: 
       </div>
 
       {inv.status === "revision_requested" && (
-        <div className="banner dark">
-          <Icon n="alert" s={18} />
-          <div>
-            <b>Revisi diminta Finance</b>
-            {inv.revision_notes}
-          </div>
-        </div>
+        <RevisionNotes
+          title="Revisi diminta Finance"
+          notes={inv.revision_notes}
+          meta={lastEvent && [lastEvent.actor_email, fmtDateTime(lastEvent.created_at)].filter(Boolean).join(" · ")}
+        />
       )}
       {inv.status === "rejected" && (
         <div className="banner dark">

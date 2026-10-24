@@ -287,6 +287,14 @@ table.t.pl { table-layout: fixed; }
 .banner { border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; display: flex; gap: 10px; align-items: flex-start; background: var(--tint); color: var(--navy); font-size: 12.5px; line-height: 1.45; }
 .banner.dark { background: var(--ink); color: var(--paper); }
 .banner b { display: block; font-family: var(--font-head); font-size: 13px; margin-bottom: 2px; }
+.rev-body { flex: 1; min-width: 0; }
+.rev-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; margin-bottom: 10px; }
+.rev-head b { margin: 0; }
+.rev-head small { font-size: 12px; opacity: 0.65; }
+.rev-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; counter-reset: rev; }
+.rev-list li { counter-increment: rev; display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 6px; background: rgb(255 255 255 / 0.08); }
+.rev-list li::before { content: counter(rev); flex: none; width: 18px; height: 18px; margin-top: 1px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); color: var(--ink); font-size: 11px; font-weight: 600; }
+.rev-list li span { min-width: 0; overflow-wrap: anywhere; }
 .kv { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; font-size: 13px; }
 .kv span:first-child { color: var(--mut); font-size: 12px; }
 .kv span:last-child { text-align: right; overflow-wrap: anywhere; }
