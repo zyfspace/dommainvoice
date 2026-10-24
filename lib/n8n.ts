@@ -9,7 +9,8 @@ export type OutboundEvent =
   | "invoice.approved"
   | "invoice.revision_requested"
   | "invoice.rejected"
-  | "invoice.cancelled";
+  | "invoice.cancelled"
+  | "invoice.paid";
 
 const PATH: Record<OutboundEvent, string> = {
   "invoice.submitted": "/webhook/invoice/submitted",
@@ -17,6 +18,7 @@ const PATH: Record<OutboundEvent, string> = {
   "invoice.revision_requested": "/webhook/invoice/revision",
   "invoice.rejected": "/webhook/invoice/rejected",
   "invoice.cancelled": "/webhook/invoice/cancelled",
+  "invoice.paid": "/webhook/invoice/paid",
 };
 
 export const n8nConfigured = () => Boolean(process.env.N8N_WEBHOOK_BASE_URL);

@@ -601,6 +601,25 @@ export async function recordPayment(actor: Profile | null, id: string, input: { 
     throw new ServiceError(`Gagal mengupload bukti transfer: ${e instanceof Error ? e.message : "coba lagi"}.`);
   }
   await log(inv, actor, "paid", before.status, "paid", `${rupiah(payment.amount)} · ${payment.file_name}${payment.notes ? ` · ${payment.notes}` : ""}`);
+
+  // n8n: update kolom Payment di sheet Offline Laser Request (baris grup DP/Termin = nomor tahap 1).
+  const group = await members(inv);
+  const first = group.find((g) => (g.installment ?? 1) === 1) ?? inv;
+  const paidCount = group.filter((g) => g.status === "paid").length;
+  await emit("invoice.paid", inv, {
+    paid_by: actor.email,
+    paid_by_name: actor.full_name ?? null,
+    amount: payment.amount,
+    payment_notes: payment.notes,
+    payment_type: inv.payment_type,
+    payable_label: inv.payable_label,
+    installment: inv.installment,
+    sheet_invoice_number: first.invoice_number,
+    installments_total: group.length,
+    installments_paid: paidCount,
+    all_paid: paidCount === group.length,
+    notify_emails: [],
+  });
 }
 
 // ── Surat Jalan ───────────────────────────────────────────
