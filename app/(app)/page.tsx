@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DashInvoices } from "@/components/DashInvoices";
 import { Icon } from "@/components/Icon";
+import { RefreshButton } from "@/components/RefreshButton";
 import { requireProfile } from "@/lib/auth";
 import { invoiceAmount, rupiah, todayJakarta } from "@/lib/domain";
 import { repo } from "@/lib/repo";
@@ -53,6 +54,7 @@ export default async function Overview() {
               : "Siapkan invoice dan ajukan ke Finance untuk approval."}
           </div>
         </div>
+        <RefreshButton />
         {me.role === "admin" && (
           <Link href="/invoices/new" className="btn pri">
             <Icon n="plus" /> Invoice baru
