@@ -124,6 +124,9 @@ export function InvoicePaper({ inv }: { inv: InvoiceFull }) {
                 <td>
                   {it.product}
                   {it.customization !== "plain" && <span className="inv-cz"> · {CUSTOMIZATION_LABEL[it.customization]}</span>}
+                  {(it.ship_courier || it.ship_city) && (
+                    <span className="inv-cz"> · {[it.ship_courier, it.ship_city].filter(Boolean).join(", ")}</span>
+                  )}
                   {it.notes && <small>{it.notes}</small>}
                 </td>
                 <td className="c">{it.quantity.toLocaleString("en-US")}</td>

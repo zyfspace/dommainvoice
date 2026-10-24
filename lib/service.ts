@@ -169,6 +169,8 @@ function validate(input: InvoiceInput): NewItem[] {
     discount_percent: i.discount_percent,
     customization: i.customization,
     notes: i.notes?.trim() || null,
+    ship_courier: i.ship_courier?.trim() || null,
+    ship_city: i.ship_city?.trim() || null,
     line_total: lines[idx],
   }));
 }

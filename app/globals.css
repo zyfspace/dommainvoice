@@ -262,7 +262,8 @@ table.t.pl { table-layout: fixed; }
 .item-row1, .item-row2 { display: grid; gap: 10px; }
 .item-row1 { grid-template-columns: 120px minmax(0, 1fr) 150px; margin-bottom: 10px; }
 .item-row2 { grid-template-columns: 75px 75px 140px 90px minmax(0, 1fr); }
-.item-ship { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr) 75px 75px 160px; }
+.item-ship { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 75px 75px 160px; }
+.item-ship .ship-note { grid-column: 1 / -1; }
 .seg { display: inline-grid; grid-auto-flow: column; border: 1px solid var(--line); border-radius: 6px; padding: 2px; gap: 2px; background: var(--paper); }
 .seg button { height: 28px; padding: 0 10px; border-radius: 4px; color: var(--mut); font-size: 12px; transition: 0.15s; white-space: nowrap; }
 .seg button.on { background: var(--navy); color: var(--paper); }
@@ -584,7 +585,7 @@ a.dstat.hl:hover { background: var(--navy-soft); }
   .item-row2 { grid-template-columns: 1fr 1fr; gap: 8px; }
   .item-row2 .f:nth-child(n + 5) { grid-column: 1 / -1; }
   .item-ship { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .item-ship .f:first-child, .item-ship .f:last-child { grid-column: 1 / -1; }
+  .item-ship .f:nth-child(5) { grid-column: 1 / -1; }
   .pay-row:not(.link) { display: grid; grid-template-columns: 96px minmax(0, 1fr) 30px; }
   .pay-row .pay-bank { width: auto !important; }
   .pay-row .pay-name { grid-column: 1 / 3; grid-row: 2; }

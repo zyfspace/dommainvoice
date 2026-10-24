@@ -49,6 +49,9 @@ export const DEFAULT_REMARKS_KEY = "default_remarks";
 
 export const UOM_OPTIONS = ["Pcs", "Rit", "Set", "Box", "Pack", "Lot", "Unit"];
 
+/** Saran kurir baris pengiriman (tetap bisa diisi bebas). */
+export const COURIER_OPTIONS = ["Lalamove", "GoSend", "GrabExpress", "J&T Express", "J&T Cargo", "JNE", "Lion Parcel", "SiCepat", "Paxel", "Deliveree"];
+
 /** Sufiks nama file PDF per entitas, sesuai template "Date_Invoice_Name - ...". */
 export const PDF_SUFFIX: Record<Entity, string> = { dts: "Inv PT", tmb: "Invoice Domma (TMB)" };
 

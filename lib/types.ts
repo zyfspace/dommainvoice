@@ -63,10 +63,14 @@ export interface InvoiceItem {
   discount_percent: number;
   customization: Customization;
   notes: string | null;
+  /** Baris biaya pengiriman: kurir & kota tujuan. */
+  ship_courier: string | null;
+  ship_city: string | null;
   line_total: number;
 }
 
-export type ItemInput = Pick<InvoiceItem, "sku" | "product" | "quantity" | "uom" | "unit_price" | "discount_percent" | "customization" | "notes">;
+export type ItemInput = Pick<InvoiceItem, "sku" | "product" | "quantity" | "uom" | "unit_price" | "discount_percent" | "customization" | "notes"> &
+  Partial<Pick<InvoiceItem, "ship_courier" | "ship_city">>;
 
 export interface Invoice {
   id: string;
